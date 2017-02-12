@@ -1,0 +1,33 @@
+{
+  "name": "phasem",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "postinstall": "grunt && npm run ng-build",
+    "ng-build": "ngc -p tsconfig-aot.json && npm run bundle",
+    "bundle": "webpack",
+    "test": "mocha"
+  },
+  "dependencies": {
+    "@angular/common": "^4.4.0-RC.0",
+    "@angular/compiler": "^4.4.0-RC.0",
+    "@angular/compiler-cli": "^4.4.0-RC.0",
+    "@angular/core": "^4.4.0-RC.0",
+    "@angular/forms": "^4.4.0-RC.0",
+    "@angular/platform-browser": "^4.4.0-RC.0",
+    "@angular/platform-server": "^4.4.0-RC.0",
+    "@angular/router": "^4.4.0-RC.0",
+    "core-js": "^2.5.1",
+    "es-cookie": "^1.1.1",
+    "rxjs": "^5.4.3",
+    "zone.js": "^0.8.17"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-npmcopy": "^0.1.0",
+    "html-webpack-plugin": "^2.30.1",
+    "mocha": "^3.5.0",
+    "typescript": "^2.5.2",
+    "webpack": "^3.5.5"
+  }
+}

@@ -1,0 +1,6 @@
+/aot/
+/compiled_ts/
+/node_modules/
+/public/dist/
+/vendor/
+/config.user.php
