@@ -1,0 +1,13 @@
+<h1>Phasem</h1>
+
+<p *ngIf="currentUser() | async">
+    Welcome {{(currentUser() | async).fullName}}! <a [routerLink]="['/logout']">Sign out</a>
+</p>
+
+<p *ngIf="!(currentUser() | async)">
+    <a [routerLink]="['/']">Home</a>
+    <a [routerLink]="['/register']">Create an account</a>
+    <a [routerLink]="['/login']">Sign in</a>
+</p>
+
+<router-outlet></router-outlet>

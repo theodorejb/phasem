@@ -1,0 +1,21 @@
+<h2>Create account</h2>
+
+<p class="error">{{error}}</p>
+
+<form ngNativeValidate (submit)="register()">
+    <div class="formSection">
+        <label for="name-input">Name</label>
+        <input id="name-input" name="name" [(ngModel)]="newUser.fullName" required/>
+    </div>
+    <div class="formSection">
+        <label for="email-input">Email</label>
+        <input id="email-input" type="email" name="email" [(ngModel)]="newUser.email" required/>
+    </div>
+    <div class="formSection">
+        <label for="password-input">Password</label>
+        <input id="password-input" type="password" name="password" [(ngModel)]="newUser.password" required/>
+    </div>
+    <div class="formSection">
+        <button>{{submitting ? 'Creating account...' : 'Sign up'}}</button>
+    </div>
+</form>

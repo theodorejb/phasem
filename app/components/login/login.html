@@ -1,0 +1,17 @@
+<h2>Sign in</h2>
+
+<p class="error">{{error}}</p>
+
+<form ngNativeValidate (submit)="signIn()">
+    <div class="formSection">
+        <label for="email-input">Email</label>
+        <input id="email-input" type="email" name="email" [(ngModel)]="loginData.email" required/>
+    </div>
+    <div class="formSection">
+        <label for="password-input">Password</label>
+        <input id="password-input" type="password" name="password" [(ngModel)]="loginData.password" required/>
+    </div>
+    <div class="formSection">
+        <button>{{submitting ? 'Signing in...' : 'Sign in'}}</button>
+    </div>
+</form>

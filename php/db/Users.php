@@ -46,6 +46,36 @@ class Users
         return $result->getId();
     }
 
+    public function updateUserFromApi(int $userId, array $data): void
+    {
+        $set = [
+            'user_last_updated' => (new \DateTime())->format('c'),
+        ];
+
+        if (isset($data['fullName'])) {
+            self::validateFullName($data['fullName']);
+            $set['user_fullname'] = $data['fullName'];
+        }
+
+        if (isset($data['email'])) {
+            self::validateEmail($data['email']);
+            $user = $this->getUserByEmail($data['email']);
+
+            if ($user->getId() !== $userId) {
+                throw new HttpException('This email is already in use by a different account.', StatusCode::CONFLICT);
+            }
+
+            $set['user_email'] = $data['email'];
+        }
+
+        if (isset($data['password'])) {
+            self::validatePassword($data['password']);
+            $set['user_password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+        }
+
+        $this->db->updateRows('users', $set, ['user_id' => $userId]);
+    }
+
     public function getUserByEmail(string $email): ?User
     {
         $row = $this->db->query("SELECT * FROM users WHERE user_email = ?", [$email])->getFirst();

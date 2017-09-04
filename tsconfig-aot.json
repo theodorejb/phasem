@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig-base.json",
+  "files": [
+    "app/app.module.ts",
+    "app/main.ts"
+  ],
+  "angularCompilerOptions": {
+    "genDir": "aot",
+    "skipMetadataEmit" : true
+  }
+}
