@@ -6,14 +6,14 @@ import {AuthService} from "../../services/AuthService";
 })
 export class LogOutComponent implements OnInit {
     public error: string;
-    public success: boolean = false;
+    public success: boolean | null = null;
 
     constructor(private authService: AuthService) {}
 
     ngOnInit() {
         this.authService.logOut()
             .subscribe(
-                () => {this.success = true;},
+                result => {this.success = result;},
                 error => {this.error = error;}
             );
     }

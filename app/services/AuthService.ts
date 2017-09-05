@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs/Observable';
 import {LoginCredentials, NewUser} from '../models/User';
 import {ApiService} from "./ApiService";
 
@@ -15,8 +16,15 @@ export class AuthService {
             .map((resp) => {this.api.setAuth(resp.token);});
     }
 
-    logOut() {
-        return this.api.request('delete', 'auth/token')
-            .map(() => {this.api.unsetCurrentUser();});
+    logOut(): Observable<boolean> {
+        return this.api.isLoggedIn()
+            .mergeMap(isLoggedIn => {
+                if (isLoggedIn) {
+                    return this.api.request('delete', 'auth/token').map(() => true);
+                } else {
+                    return Observable.of(false);
+                }
+            })
+            .do(() => {this.api.unsetCurrentUser();});
     }
 }

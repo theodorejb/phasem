@@ -19,6 +19,7 @@ interface RequestOptions {
 export class ApiService {
     private baseHeaders: HttpHeaders;
     private currentUser: Observable<User>;
+    private redirectUrl: string | null;
 
     constructor (private http: HttpClient, private router: Router) {}
 
@@ -59,9 +60,14 @@ export class ApiService {
                 } else {
                     // backend returned an unsuccessful response code
 
-                    if (err.status === 401 && this.router.url !== '/login') {
-                        console.log('Unauthorized - redirecting to login', this.router.url);
-                        this.router.navigate(['/login']);
+                    if (err.status === 401) {
+                        // invalid auth token
+                        this.currentUser = null;
+
+                        if (this.router.url !== '/login') {
+                            this.setRedirectUrl(this.router.url);
+                            this.router.navigate(['/login']);
+                        }
                     }
 
                     try {
@@ -117,5 +123,17 @@ export class ApiService {
         }
 
         return this.currentUser;
+    }
+
+    isLoggedIn(): Observable<boolean> {
+        return this.getCurrentUser().map(user => user !== null);
+    }
+
+    setRedirectUrl(url: string | null): void {
+        this.redirectUrl = url;
+    }
+
+    getRedirectUrl(): string | null {
+        return this.redirectUrl;
     }
 }

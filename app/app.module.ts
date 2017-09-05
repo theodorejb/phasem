@@ -13,6 +13,7 @@ import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/publishReplay';
 
@@ -21,6 +22,8 @@ import {appRoutes, appComponents} from './routing';
 import {ApiService} from './services/ApiService';
 import {AppComponent} from './components/app/app';
 import {AuthService} from './services/AuthService';
+import {AuthGuard} from "./services/AuthGuard";
+import {NoAuthGuard} from "./services/NoAuthGuard";
 
 @NgModule({
     imports: [
@@ -35,7 +38,9 @@ import {AuthService} from './services/AuthService';
     ],
     providers: [
         ApiService,
+        AuthGuard,
         AuthService,
+        NoAuthGuard,
         Title
     ],
     bootstrap: [AppComponent]

@@ -1,3 +1,4 @@
 <p class="error">{{error}}</p>
 
-<p *ngIf="success">You have been successfully signed out!</p>
+<p *ngIf="success === true">You have been successfully signed out!</p>
+<p *ngIf="success === false">You are already signed out!</p>

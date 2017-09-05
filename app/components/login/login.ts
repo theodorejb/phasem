@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthService} from "../../services/AuthService";
 import {LoginCredentials} from "../../models/User";
+import {ApiService} from "../../services/ApiService";
 
 @Component({
     templateUrl: 'login.html',
@@ -17,6 +18,7 @@ export class LoginComponent {
 
     constructor(
         private authService: AuthService,
+        private apiService: ApiService,
         private router: Router
     ) {}
 
@@ -26,7 +28,15 @@ export class LoginComponent {
         this.authService.logIn(this.loginData)
             .subscribe(
                 () => {
-                    this.router.navigate(['/']);
+                    let redirectUrl = this.apiService.getRedirectUrl();
+
+                    if (!redirectUrl) {
+                        redirectUrl = '/';
+                    } else {
+                        this.apiService.setRedirectUrl(null);
+                    }
+
+                    this.router.navigate([redirectUrl]);
                 },
                 error => {this.error = error;}
             )
