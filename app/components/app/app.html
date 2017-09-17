@@ -1,13 +1,20 @@
-<h1>Phasem</h1>
+<header class="mainHeader">
+    <h1>Phasem</h1>
 
-<p *ngIf="currentUser() | async">
-    Welcome {{(currentUser() | async).fullName}}! <a [routerLink]="['/logout']">Sign out</a>
-</p>
+    <div *ngIf="currentUser() | async" class="userLinks">
+        {{(currentUser() | async).fullName}}
+        <a [routerLink]="['/']">Home</a>
+        <a [routerLink]="['/settings']">Settings</a>
+        <a [routerLink]="['/logout']">Sign out</a>
+    </div>
 
-<p *ngIf="!(currentUser() | async)">
-    <a [routerLink]="['/']">Home</a>
-    <a [routerLink]="['/register']">Create an account</a>
-    <a [routerLink]="['/login']">Sign in</a>
-</p>
+    <div *ngIf="!(currentUser() | async)" class="userLinks">
+        <a [routerLink]="['/']">Home</a>
+        <a [routerLink]="['/register']">Register</a>
+        <a [routerLink]="['/login']">Sign in</a>
+    </div>
+</header>
 
-<router-outlet></router-outlet>
+<div class="mainBody">
+    <router-outlet></router-outlet>
+</div>
