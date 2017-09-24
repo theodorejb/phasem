@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router, NavigationEnd} from '@angular/router';
+import {filter, map} from 'rxjs/operators';
 import {Title} from '@angular/platform-browser';
 import {ApiService} from '../../services/ApiService';
 
@@ -17,16 +18,18 @@ export class AppComponent implements OnInit {
 
     ngOnInit() {
         this.router.events
-            .filter(event => event instanceof NavigationEnd)
-            .map(_ => {
-                let route = this.activated;
+            .pipe(
+                filter(event => event instanceof NavigationEnd),
+                map(_ => {
+                    let route = this.activated;
 
-                while(route.firstChild) {
-                    route = route.firstChild;
-                }
+                    while(route.firstChild) {
+                        route = route.firstChild;
+                    }
 
-                return route.snapshot.data;
-            })
+                    return route.snapshot.data;
+                })
+            )
             .subscribe(data => {
                 let title = 'Phasem';
 

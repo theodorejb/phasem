@@ -1,5 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
+import {of as rxOf} from 'rxjs/observable/of';
+import {map, mergeMap, tap} from 'rxjs/operators';
 import {LoginCredentials, NewUser} from '../models/User';
 import {ApiService} from "./ApiService";
 
@@ -13,18 +15,25 @@ export class AuthService {
 
     logIn(credentials: LoginCredentials) {
         return this.api.requestBody('post', 'auth/token', credentials)
-            .map((resp) => {this.api.setAuth(resp.token);});
+            .pipe(
+                map((resp: {token: string}) => {this.api.setAuth(resp.token);})
+            );
     }
 
     logOut(): Observable<boolean> {
         return this.api.isLoggedIn()
-            .mergeMap(isLoggedIn => {
-                if (isLoggedIn) {
-                    return this.api.request('delete', 'auth/token').map(() => true);
-                } else {
-                    return Observable.of(false);
-                }
-            })
-            .do(() => {this.api.unsetCurrentUser();});
+            .pipe(
+                mergeMap(isLoggedIn => {
+                    if (isLoggedIn) {
+                        return this.api.request('delete', 'auth/token')
+                            .pipe(
+                                map(() => true)
+                            );
+                    } else {
+                        return rxOf(false);
+                    }
+                }),
+                tap(() => {this.api.unsetCurrentUser();})
+            );
     }
 }

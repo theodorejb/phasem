@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
+import {mergeMap} from 'rxjs/operators';
 import {AuthService} from "../../services/AuthService";
 import {NewUser} from "../../models/User";
 
@@ -25,7 +26,9 @@ export class RegisterComponent {
         this.submitting = true;
 
         this.authService.createUser(this.newUser)
-            .mergeMap(() => this.authService.logIn(this.newUser))
+            .pipe(
+                mergeMap(() => this.authService.logIn(this.newUser))
+            )
             .subscribe(
                 () => {
                     this.router.navigate(['/']);

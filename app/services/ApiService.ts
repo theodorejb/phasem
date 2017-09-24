@@ -2,6 +2,9 @@ import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
+import {of as rxOf} from 'rxjs/observable/of';
+import {_throw} from 'rxjs/observable/throw';
+import {catchError, map, publishReplay, refCount} from 'rxjs/operators';
 import * as Cookies from 'es-cookie';
 import {User} from '../models/User';
 
@@ -51,46 +54,50 @@ export class ApiService {
         }
 
         return this.http.request(method, `api/${url}`, options)
-            .catch((err: HttpErrorResponse) => {
-                let message: string;
+            .pipe(
+                catchError((err: HttpErrorResponse) => {
+                    let message: string;
 
-                if (err.error instanceof Error) {
-                    // a client-side or network error occurred
-                    message = err.error.message;
-                } else {
-                    // backend returned an unsuccessful response code
+                    if (err.error instanceof Error) {
+                        // a client-side or network error occurred
+                        message = err.error.message;
+                    } else {
+                        // backend returned an unsuccessful response code
 
-                    if (err.status === 401) {
-                        // invalid auth token
-                        this.currentUser = null;
+                        if (err.status === 401) {
+                            // invalid auth token
+                            this.currentUser = null;
 
-                        if (this.router.url !== '/login') {
-                            this.setRedirectUrl(this.router.url);
-                            this.router.navigate(['/login']);
+                            if (this.router.url !== '/login') {
+                                this.setRedirectUrl(this.router.url);
+                                this.router.navigate(['/login']);
+                            }
+                        }
+
+                        try {
+                            let errorResp = JSON.parse(err.error);
+
+                            if (errorResp.error) {
+                                message = errorResp.error;
+                            }
+                        } catch (e) {
+                        }
+
+                        if (!message) {
+                            message = 'Server error';
                         }
                     }
 
-                    try {
-                        let errorResp = JSON.parse(err.error);
-
-                        if (errorResp.error) {
-                            message = errorResp.error;
-                        }
-                    } catch (e) {
-                    }
-
-                    if (!message) {
-                        message = 'Server error';
-                    }
-                }
-
-                return Observable.throw(message);
-            });
+                    return _throw(message);
+                })
+            );
     }
 
     requestData<T>(method: string, url: string, options: RequestOptions = {}) {
         return this.request(method, url, options)
-            .map(res => res.data as T);
+            .pipe(
+                map((res: {data: any}) => res.data as T)
+            );
     }
 
     requestBody(method: string, url: string, object: {[key: string]: any}) {
@@ -114,19 +121,24 @@ export class ApiService {
             // avoid multiple network requests if getCurrentUser() is called multiple times
 
             if (!this.getAuthHeader()) {
-                return Observable.of(null);
+                return rxOf(null);
             }
 
             this.currentUser = this.requestData<User>('get','me')
-                .publishReplay(1) // cache most recent value
-                .refCount(); // keep observable alive as long as there are subscribers
+                .pipe(
+                    publishReplay(1), // cache most recent value
+                    refCount() // keep observable alive as long as there are subscribers
+                );
         }
 
         return this.currentUser;
     }
 
     isLoggedIn(): Observable<boolean> {
-        return this.getCurrentUser().map(user => user !== null);
+        return this.getCurrentUser()
+            .pipe(
+                map(user => user !== null)
+            );
     }
 
     setRedirectUrl(url: string | null): void {
