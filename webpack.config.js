@@ -1,6 +1,7 @@
-var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
 var path = require('path');
+var rxPaths = require('rxjs/_esm5/path-mapping');
 
 module.exports = function(env) {
     return [
@@ -9,15 +10,25 @@ module.exports = function(env) {
                 app: './compiled_ts/app/main.js',
             },
             output: {
-                filename: 'dist/js/[name].js',
+                filename: 'dist/[name].js',
                 path: path.resolve(__dirname, './public'),
                 publicPath: '',
             },
+            resolve: {
+                alias: rxPaths(),
+            },
             plugins: [
-                new webpack.optimize.ModuleConcatenationPlugin(),
-                new webpack.optimize.UglifyJsPlugin({comments: false}),
                 new HtmlWebpackPlugin({
                     template: 'public/index_template.html',
+                    hash: true,
+                }),
+                new HtmlWebpackIncludeAssetsPlugin({
+                    assets: [
+                        'css/base_styles.css',
+                        'dist/js/core-js/shim.min.js',
+                        'dist/js/zone.js/zone.min.js',
+                    ],
+                    append: false,
                     hash: true,
                 }),
             ],

@@ -27,6 +27,10 @@ body {
     display: inline-block;
 }
 
+.userLinks a {
+    margin-left: 0.5em;
+}
+
 .mainBody {
     padding: 0 1em 1em;
 }

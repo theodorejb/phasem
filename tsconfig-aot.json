@@ -5,7 +5,7 @@
     "app/main.ts"
   ],
   "angularCompilerOptions": {
-    "genDir": "aot",
-    "skipMetadataEmit" : true
+    "preserveWhitespaces": false,
+    "skipMetadataEmit": true
   }
 }
