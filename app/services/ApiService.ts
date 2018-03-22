@@ -1,9 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
-import {of as rxOf} from 'rxjs/observable/of';
-import {_throw} from 'rxjs/observable/throw';
+import {Observable, of as rxOf, throwError} from 'rxjs';
 import {catchError, map, publishReplay, refCount} from 'rxjs/operators';
 import * as Cookies from 'es-cookie';
 import {User} from '../models/User';
@@ -88,7 +86,7 @@ export class ApiService {
                         }
                     }
 
-                    return _throw(message);
+                    return throwError(message);
                 })
             );
     }
