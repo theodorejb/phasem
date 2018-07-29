@@ -10,7 +10,7 @@ import {ApiService} from '../../services/ApiService';
 })
 export class AppComponent implements OnInit {
     constructor(
-        private api: ApiService,
+        public api: ApiService,
         private router: Router,
         private activated: ActivatedRoute,
         private titleService: Title,

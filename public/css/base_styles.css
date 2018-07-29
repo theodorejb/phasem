@@ -9,6 +9,20 @@ body {
     color: red;
 }
 
+.updateBar {
+    margin: 0;
+    padding: 0.625em;
+    text-align: center;
+    background: #555;
+    color: #fff;
+    line-height: 1.5em;
+}
+
+.updateBar a {
+    color: lightskyblue;
+    display: inline-block;
+}
+
 .mainHeader {
     border-bottom: 1px solid #bbb;
     padding: 1em;

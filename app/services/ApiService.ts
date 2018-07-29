@@ -21,11 +21,15 @@ export class ApiService {
     private baseHeaders: HttpHeaders;
     private currentUser: Observable<User>;
     private redirectUrl: string | null;
+    private currentBuild: string;
+    private newBuildAvailable: boolean = false;
+    private lastBuildCheck: Date = new Date();
 
     constructor (private http: HttpClient, private router: Router) {}
 
     private initializeBaseHeaders(): void {
         if (!this.baseHeaders) {
+            this.currentBuild = getBuildHash(document);
             this.baseHeaders = new HttpHeaders();
             let token = Cookies.get('ApiAuth');
 
@@ -49,6 +53,30 @@ export class ApiService {
 
         if (!options.headers.has('Authorization') && this.baseHeaders.has('Authorization')) {
             options.headers = options.headers.set('Authorization', this.baseHeaders.get('Authorization'));
+        }
+
+        if (!this.newBuildAvailable) {
+            let thresholdDate = new Date();
+            thresholdDate.setMinutes(thresholdDate.getMinutes() - 2);
+
+            if (thresholdDate > this.lastBuildCheck) {
+                this.lastBuildCheck = new Date();
+
+                setTimeout(() => {
+                    this.http.get('login', {responseType: 'text'}).subscribe(
+                        page => {
+                            let build = getBuildHash(new DOMParser().parseFromString(page, "text/html"));
+
+                            if (build !== this.currentBuild) {
+                                this.newBuildAvailable = true;
+                            }
+                        },
+                        error => {
+                            console.error('Failed to request index page');
+                        },
+                    );
+                }, 3000);
+            }
         }
 
         return this.http.request(method, `api/${url}`, options)
@@ -146,5 +174,19 @@ export class ApiService {
 
     getRedirectUrl(): string | null {
         return this.redirectUrl;
+    }
+
+    isNewBuildAvailable(): boolean {
+        return this.newBuildAvailable;
+    }
+}
+
+function getBuildHash(doc: Document): string {
+    let scripts = doc.getElementsByTagName('script');
+
+    for (let i = 0; i < scripts.length; i++) {
+        if (scripts.item(i).src) {
+            return scripts.item(i).src.split('?')[1];
+        }
     }
 }
