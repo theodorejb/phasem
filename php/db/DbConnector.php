@@ -13,6 +13,8 @@ use Phasem\App;
  */
 class DbConnector
 {
+    const SQL_DATE = 'Y-m-d H:i:s';
+
     private static $connection;
     private static $peachySql;
 

@@ -22,7 +22,7 @@ class AuthTokens
     {
         $token = self::generateToken();
         $parts = self::tokenParts($token);
-        $now = (new \DateTime())->format('c');
+        $now = (new \DateTime())->format(DbConnector::SQL_DATE);
 
         $this->db->insertRow('auth_tokens', [
             'user_id' => $user->getId(),
@@ -38,7 +38,7 @@ class AuthTokens
 
     public function deactivateToken(int $authId): void
     {
-        $set = ['auth_token_deactivated' => (new \DateTime())->format('c')];
+        $set = ['auth_token_deactivated' => (new \DateTime())->format(DbConnector::SQL_DATE)];
         $this->db->updateRows('auth_tokens', $set, ['auth_id' => $authId]);
     }
 
@@ -83,7 +83,7 @@ class AuthTokens
         }
 
         if ($autoRenew && $lastRenewed < new \DateTime('1 day ago')) {
-            $set = ['auth_token_last_renewed' => (new \DateTime())->format('c')];
+            $set = ['auth_token_last_renewed' => (new \DateTime())->format(DbConnector::SQL_DATE)];
             $this->db->updateRows('auth_tokens', $set, ['auth_id' => $tokenRow['auth_id']]);
         }
 

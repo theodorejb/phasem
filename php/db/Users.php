@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Phasem\db;
 
 use Phasem\model\User;
-use Teapot\HttpException;
-use Teapot\StatusCode;
+use Teapot\{HttpException, StatusCode};
 
 class Users
 {
@@ -33,7 +32,7 @@ class Users
             throw new HttpException('An account with this email already exists. Try logging in instead.', StatusCode::CONFLICT);
         }
 
-        $now = (new \DateTime())->format('c');
+        $now = (new \DateTime())->format(DbConnector::SQL_DATE);
 
         $result = $this->db->insertRow('users', [
             'user_fullname' => $data['fullName'],
@@ -49,7 +48,7 @@ class Users
     public function updateUserFromApi(int $userId, array $data): void
     {
         $set = [
-            'user_last_updated' => (new \DateTime())->format('c'),
+            'user_last_updated' => (new \DateTime())->format(DbConnector::SQL_DATE),
         ];
 
         if (isset($data['fullName'])) {
