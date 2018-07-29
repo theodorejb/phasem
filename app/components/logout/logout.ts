@@ -14,7 +14,7 @@ export class LogOutComponent implements OnInit {
         this.authService.logOut()
             .subscribe(
                 result => {this.success = result;},
-                error => {this.error = error;}
+                error => {this.error = error;},
             );
     }
 }

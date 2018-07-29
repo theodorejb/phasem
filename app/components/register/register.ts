@@ -19,7 +19,7 @@ export class RegisterComponent {
 
     constructor(
         private authService: AuthService,
-        private router: Router
+        private router: Router,
     ) {}
 
     register() {
@@ -27,13 +27,13 @@ export class RegisterComponent {
 
         this.authService.createUser(this.newUser)
             .pipe(
-                mergeMap(() => this.authService.logIn(this.newUser))
+                mergeMap(() => this.authService.logIn(this.newUser)),
             )
             .subscribe(
                 () => {
                     this.router.navigate(['/']);
                 },
-                error => {this.error = error;}
+                error => {this.error = error;},
             )
             .add(() => {this.submitting = false;});
     }

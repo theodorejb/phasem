@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
+import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {ApiService} from './ApiService';
@@ -16,7 +16,7 @@ export class AuthGuard implements CanActivate {
                         this.apiService.setRedirectUrl(state.url);
                         this.router.navigate(['/login']);
                     }
-                })
+                }),
             );
     }
 }

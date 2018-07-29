@@ -15,7 +15,7 @@ export class AuthService {
     logIn(credentials: LoginCredentials) {
         return this.api.requestBody('post', 'auth/token', credentials)
             .pipe(
-                map((resp: {token: string}) => {this.api.setAuth(resp.token);})
+                map((resp: {token: string}) => {this.api.setAuth(resp.token);}),
             );
     }
 
@@ -26,13 +26,13 @@ export class AuthService {
                     if (isLoggedIn) {
                         return this.api.request('delete', 'auth/token')
                             .pipe(
-                                map(() => true)
+                                map(() => true),
                             );
                     } else {
                         return rxOf(false);
                     }
                 }),
-                tap(() => {this.api.unsetCurrentUser();})
+                tap(() => {this.api.unsetCurrentUser();}),
             );
     }
 }

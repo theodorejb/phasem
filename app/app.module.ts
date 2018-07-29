@@ -3,7 +3,7 @@ import {BrowserModule, Title} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {RouterModule} from '@angular/router';
-import {appRoutes, appComponents} from './routing';
+import {appComponents, appRoutes} from './routing';
 import {ApiService} from './services/ApiService';
 import {AppComponent} from './components/app/app';
 import {AuthService} from './services/AuthService';
@@ -26,8 +26,8 @@ import {NoAuthGuard} from "./services/NoAuthGuard";
         AuthGuard,
         AuthService,
         NoAuthGuard,
-        Title
+        Title,
     ],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
 })
 export class AppModule {}

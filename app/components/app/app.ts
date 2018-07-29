@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router, NavigationEnd} from '@angular/router';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {filter, map} from 'rxjs/operators';
 import {Title} from '@angular/platform-browser';
 import {ApiService} from '../../services/ApiService';
@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
         private api: ApiService,
         private router: Router,
         private activated: ActivatedRoute,
-        private titleService: Title
+        private titleService: Title,
     ) {}
 
     ngOnInit() {
@@ -23,12 +23,12 @@ export class AppComponent implements OnInit {
                 map(_ => {
                     let route = this.activated;
 
-                    while(route.firstChild) {
+                    while (route.firstChild) {
                         route = route.firstChild;
                     }
 
                     return route.snapshot.data;
-                })
+                }),
             )
             .subscribe(data => {
                 let title = 'Phasem';

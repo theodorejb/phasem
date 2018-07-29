@@ -79,6 +79,7 @@ export class ApiService {
                                 message = errorResp.error;
                             }
                         } catch (e) {
+                            // do nothing
                         }
 
                         if (!message) {
@@ -87,14 +88,14 @@ export class ApiService {
                     }
 
                     return throwError(message);
-                })
+                }),
             );
     }
 
     requestData<T>(method: string, url: string, options: RequestOptions = {}) {
         return this.request(method, url, options)
             .pipe(
-                map((res: {data: any}) => res.data as T)
+                map((res: {data: any}) => res.data as T),
             );
     }
 
@@ -125,7 +126,7 @@ export class ApiService {
             this.currentUser = this.requestData<User>('get','me')
                 .pipe(
                     publishReplay(1), // cache most recent value
-                    refCount() // keep observable alive as long as there are subscribers
+                    refCount(), // keep observable alive as long as there are subscribers
                 );
         }
 
@@ -135,7 +136,7 @@ export class ApiService {
     isLoggedIn(): Observable<boolean> {
         return this.getCurrentUser()
             .pipe(
-                map(user => user !== null)
+                map(user => user !== null),
             );
     }
 

@@ -19,7 +19,7 @@ export class LoginComponent {
     constructor(
         private authService: AuthService,
         private apiService: ApiService,
-        private router: Router
+        private router: Router,
     ) {}
 
     signIn() {
@@ -38,7 +38,7 @@ export class LoginComponent {
 
                     this.router.navigate([redirectUrl]);
                 },
-                error => {this.error = error;}
+                error => {this.error = error;},
             )
             .add(() => {this.submitting = false;});
     }
