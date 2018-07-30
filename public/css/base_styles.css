@@ -48,3 +48,25 @@ body {
 .mainBody {
     padding: 0 1em 1em;
 }
+
+form {
+    margin-bottom: 1.25em;
+}
+
+.formSection {
+    margin-bottom: 0.5em;
+}
+
+.formSection input[type="text"], .formSection input[type="email"], .formSection input[type="password"] {
+    width: 20em;
+}
+
+.formSection label[for] {
+    display: block;
+    font-weight: bold;
+    font-size: 0.875em;
+}
+
+.formSection input + button {
+    margin-left: 0.5em;
+}

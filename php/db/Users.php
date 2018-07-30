@@ -22,7 +22,7 @@ class Users
             throw new HttpException('Name, email, and password must be set');
         }
 
-        self::validateFullName($data['fullName']);
+        $fullName = self::validateFullName($data['fullName']);
         self::validateEmail($data['email']);
         self::validatePassword($data['password']);
 
@@ -35,9 +35,9 @@ class Users
         $now = (new \DateTime())->format(DbConnector::SQL_DATE);
 
         $result = $this->db->insertRow('users', [
-            'user_fullname' => $data['fullName'],
+            'user_fullname' => $fullName,
             'user_email' => $data['email'],
-            'user_password' => password_hash($data['password'], PASSWORD_DEFAULT),
+            'user_password' => self::hashPassword($data['password']),
             'user_created' => $now,
             'user_last_updated' => $now,
         ]);
@@ -45,34 +45,61 @@ class Users
         return $result->getId();
     }
 
-    public function updateUserFromApi(int $userId, array $data): void
+    public function updateUserProfile(User $user, array $data): void
     {
+        if (!isset($data['fullName'])) {
+            throw new HttpException('Missing required fullName property');
+        }
+
+        $fullName = self::validateFullName($data['fullName']);
+
         $set = [
+            'user_fullname' => $fullName,
             'user_last_updated' => (new \DateTime())->format(DbConnector::SQL_DATE),
         ];
 
-        if (isset($data['fullName'])) {
-            self::validateFullName($data['fullName']);
-            $set['user_fullname'] = $data['fullName'];
+        $this->db->updateRows('users', $set, ['user_id' => $user->getId()]);
+    }
+
+    public function updateUserEmail(User $user, array $data): void
+    {
+        if (!isset($data['email'])) {
+            throw new HttpException('Missing required email property');
         }
 
-        if (isset($data['email'])) {
-            self::validateEmail($data['email']);
-            $user = $this->getUserByEmail($data['email']);
+        self::validateEmail($data['email']);
+        $userWithEmail = $this->getUserByEmail($data['email']);
 
-            if ($user->getId() !== $userId) {
-                throw new HttpException('This email is already in use by a different account.', StatusCode::CONFLICT);
-            }
-
-            $set['user_email'] = $data['email'];
+        if ($userWithEmail !== null && $userWithEmail->getId() !== $user->getId()) {
+            throw new HttpException('This email is already in use by a different account.', StatusCode::CONFLICT);
         }
 
-        if (isset($data['password'])) {
-            self::validatePassword($data['password']);
-            $set['user_password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+        $set = [
+            'user_email' => $data['email'],
+            'user_last_updated' => (new \DateTime())->format(DbConnector::SQL_DATE),
+        ];
+
+        $this->db->updateRows('users', $set, ['user_id' => $user->getId()]);
+    }
+
+    public function updateUserPassword(User $user, array $data): void
+    {
+        if (!isset($data['currentPassword'], $data['newPassword'])) {
+            throw new HttpException('currentPassword and newPassword properties are required');
         }
 
-        $this->db->updateRows('users', $set, ['user_id' => $userId]);
+        if (!$user->verifyPassword($data['currentPassword'])) {
+            throw new HttpException('Current password is invalid');
+        }
+
+        self::validatePassword($data['newPassword']);
+
+        $set = [
+            'user_password' => self::hashPassword($data['newPassword']),
+            'user_last_updated' => (new \DateTime())->format(DbConnector::SQL_DATE),
+        ];
+
+        $this->db->updateRows('users', $set, ['user_id' => $user->getId()]);
     }
 
     public function getUserByEmail(string $email): ?User
@@ -86,11 +113,15 @@ class Users
         return new User($row);
     }
 
-    public static function validateFullName(string $fullName)
+    public static function validateFullName(string $fullName): string
     {
-        if (trim($fullName) === '') {
+        $trimmed = trim($fullName);
+
+        if ($trimmed === '') {
             throw new HttpException('Name cannot be blank');
         }
+
+        return $trimmed;
     }
 
     public static function validateEmail(string $email)
@@ -108,5 +139,10 @@ class Users
         if (strlen($password) < 8) {
             throw new HttpException('Password must be at least 8 characters in length');
         }
+    }
+
+    private static function hashPassword(string $password): string
+    {
+        return password_hash($password, PASSWORD_DEFAULT);
     }
 }

@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable, of as rxOf, throwError} from 'rxjs';
-import {catchError, map, publishReplay, refCount} from 'rxjs/operators';
+import {catchError, map, publishReplay, refCount, tap} from 'rxjs/operators';
 import * as Cookies from 'es-cookie';
 import {User} from '../models/User';
 
@@ -16,10 +16,13 @@ interface RequestOptions {
     withCredentials?: boolean;
 }
 
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+})
 export class ApiService {
     private baseHeaders: HttpHeaders;
-    private currentUser: Observable<User>;
+    public currentUser: User | null = null;
+    private currentUserObs: Observable<User>;
     private redirectUrl: string | null;
     private currentBuild: string;
     private newBuildAvailable: boolean = false;
@@ -92,7 +95,7 @@ export class ApiService {
 
                         if (err.status === 401) {
                             // invalid auth token
-                            this.currentUser = null;
+                            this.unsetCurrentUser();
 
                             if (this.router.url !== '/login') {
                                 this.setRedirectUrl(this.router.url);
@@ -100,14 +103,10 @@ export class ApiService {
                             }
                         }
 
-                        try {
-                            let errorResp = JSON.parse(err.error);
+                        let errorResp = err.error;
 
-                            if (errorResp.error) {
-                                message = errorResp.error;
-                            }
-                        } catch (e) {
-                            // do nothing
+                        if (errorResp.error) {
+                            message = errorResp.error;
                         }
 
                         if (!message) {
@@ -132,33 +131,38 @@ export class ApiService {
     }
 
     setAuth(token: string): void {
-        this.currentUser = null;
+        this.currentUser = this.currentUserObs = null;
         Cookies.set('ApiAuth', token, {expires: 30});
         this.baseHeaders = null;
     }
 
     unsetCurrentUser(): void {
-        this.currentUser = null;
+        this.currentUser = this.currentUserObs = null;
         Cookies.remove('ApiAuth');
         this.baseHeaders = null;
     }
 
     getCurrentUser(): Observable<User | null> {
-        if (!this.currentUser) {
+        if (this.currentUser) {
+            return rxOf(this.currentUser);
+        }
+
+        if (!this.currentUserObs) {
             // avoid multiple network requests if getCurrentUser() is called multiple times
 
             if (!this.getAuthHeader()) {
                 return rxOf(null);
             }
 
-            this.currentUser = this.requestData<User>('get','me')
+            this.currentUserObs = this.requestData<User>('get','me')
                 .pipe(
+                    tap(user => {this.currentUser = user;}),
                     publishReplay(1), // cache most recent value
                     refCount(), // keep observable alive as long as there are subscribers
                 );
         }
 
-        return this.currentUser;
+        return this.currentUserObs;
     }
 
     isLoggedIn(): Observable<boolean> {

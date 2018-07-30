@@ -4,7 +4,9 @@ import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {ApiService} from './ApiService';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+})
 export class NoAuthGuard implements CanActivate {
     constructor(private apiService: ApiService) {}
 

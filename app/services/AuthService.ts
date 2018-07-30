@@ -4,7 +4,9 @@ import {map, mergeMap, tap} from 'rxjs/operators';
 import {LoginCredentials, NewUser} from '../models/User';
 import {ApiService} from "./ApiService";
 
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+})
 export class AuthService {
     constructor (private api: ApiService) {}
 

@@ -24,7 +24,7 @@ $app->post('/token', function (Request $request, Response $response) {
     $user = (new Users())->getUserByEmail($data['email']);
 
     if ($user === null || !$user->verifyPassword($data['password'])) {
-        throw new HttpException('Invalid email/password');
+        throw new HttpException('Invalid email/password', StatusCode::UNAUTHORIZED);
     }
 
     $token = (new \Phasem\db\AuthTokens())->insertToken($user);

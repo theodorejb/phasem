@@ -1,3 +1,41 @@
 <h2>Settings</h2>
 
 <p class="error">{{error}}</p>
+
+<div *ngIf="user">
+    <form ngNativeValidate (submit)="updateProfile()">
+        <div class="formSection">
+            <label for="name-input">Name</label>
+            <input id="name-input" type="text" name="name" [(ngModel)]="profile.fullName" required/>
+            <button [disabled]="profile.fullName === user.fullName || updatingProfile">
+                {{updatingProfile ? 'Updating name...' : 'Update name'}}
+            </button>
+        </div>
+    </form>
+
+    <form ngNativeValidate (submit)="updateEmail()">
+        <div class="formSection">
+            <label for="email-input">Email</label>
+            <input id="email-input" type="email" name="email" [(ngModel)]="userEmail.email" required/>
+            <button [disabled]="userEmail.email === user.email || updatingEmail">
+                {{updatingEmail ? 'Updating email...' : 'Update email'}}
+            </button>
+        </div>
+    </form>
+
+    <form ngNativeValidate (submit)="changePassword()">
+        <div class="formSection">
+            <label for="password-input">Current password</label>
+            <input id="current-password-input" type="password" name="currentPassword" [(ngModel)]="pwChange.currentPassword" required/>
+        </div>
+        <div class="formSection">
+            <label for="password-input">New password</label>
+            <input id="password-input" type="password" name="password" [(ngModel)]="pwChange.newPassword" required/>
+        </div>
+        <div class="formSection">
+            <button [disabled]="changingPassword">
+                {{changingPassword ? 'Changing password...' : 'Change password'}}
+            </button>
+        </div>
+    </form>
+</div>

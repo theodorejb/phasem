@@ -31,7 +31,7 @@ export class LoginComponent {
                     let redirectUrl = this.apiService.getRedirectUrl();
 
                     if (!redirectUrl) {
-                        redirectUrl = '/';
+                        redirectUrl = '/settings';
                     } else {
                         this.apiService.setRedirectUrl(null);
                     }

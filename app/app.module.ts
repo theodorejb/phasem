@@ -4,11 +4,7 @@ import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {RouterModule} from '@angular/router';
 import {appComponents, appRoutes} from './routing';
-import {ApiService} from './services/ApiService';
 import {AppComponent} from './components/app/app';
-import {AuthService} from './services/AuthService';
-import {AuthGuard} from "./services/AuthGuard";
-import {NoAuthGuard} from "./services/NoAuthGuard";
 
 @NgModule({
     imports: [
@@ -20,13 +16,6 @@ import {NoAuthGuard} from "./services/NoAuthGuard";
     declarations: [
         AppComponent,
         ...appComponents,
-    ],
-    providers: [
-        ApiService,
-        AuthGuard,
-        AuthService,
-        NoAuthGuard,
-        Title,
     ],
     bootstrap: [AppComponent],
 })

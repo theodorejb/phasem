@@ -13,7 +13,18 @@ and a RESTful API.
 6. Run `composer install` and `npm install`
 7. Run PHP tests via `vendor\bin\phpunit`
 
+## Features
+
+* Back-end REST API built with Slim Framework
+* Front-end built with Angular and TypeScript
+* TypeScript code is standardized via TSLint
+* User registration
+* Token-based authentication
+* Account settings page (change name, email, and password)
+* Users are prompted to reload the page when a front-end update is available
+
 ## Todo
 
-- [ ] Edit account data
+- [ ] Reset password via email
 - [ ] Two-factor authentication
+- [ ] Offline support

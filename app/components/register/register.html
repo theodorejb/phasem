@@ -5,7 +5,7 @@
 <form ngNativeValidate (submit)="register()">
     <div class="formSection">
         <label for="name-input">Name</label>
-        <input id="name-input" name="name" [(ngModel)]="newUser.fullName" required/>
+        <input id="name-input" type="text" name="name" [(ngModel)]="newUser.fullName" required/>
     </div>
     <div class="formSection">
         <label for="email-input">Email</label>

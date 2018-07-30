@@ -4,7 +4,9 @@ import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {ApiService} from './ApiService';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+})
 export class AuthGuard implements CanActivate {
     constructor(private apiService: ApiService, private router: Router) {}
 

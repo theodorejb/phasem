@@ -13,3 +13,16 @@ export interface LoginCredentials {
 export interface NewUser extends LoginCredentials {
     fullName: string,
 }
+
+export interface UserProfile {
+    fullName: string,
+}
+
+export interface UserEmail {
+    email: string,
+}
+
+export interface PasswordChange {
+    currentPassword: string,
+    newPassword: string,
+}

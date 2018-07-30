@@ -6,14 +6,14 @@
 <header class="mainHeader">
     <h1>Phasem</h1>
 
-    <div *ngIf="currentUser() | async" class="userLinks">
-        {{(currentUser() | async).fullName}}
+    <div *ngIf="api.currentUser" class="userLinks">
+        {{api.currentUser.fullName}}
         <a [routerLink]="['/']">Home</a>
         <a [routerLink]="['/settings']">Settings</a>
         <a [routerLink]="['/logout']">Sign out</a>
     </div>
 
-    <div *ngIf="!(currentUser() | async)" class="userLinks">
+    <div *ngIf="!api.currentUser" class="userLinks">
         <a [routerLink]="['/']">Home</a>
         <a [routerLink]="['/register']">Register</a>
         <a [routerLink]="['/login']">Sign in</a>

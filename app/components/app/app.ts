@@ -39,9 +39,7 @@ export class AppComponent implements OnInit {
 
                 this.titleService.setTitle(title);
             });
-    }
 
-    currentUser() {
-        return this.api.getCurrentUser();
+        this.api.isLoggedIn().subscribe(() => {/*do nothing*/}); // force login check
     }
 }
