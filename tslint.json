@@ -26,7 +26,7 @@
         ],
         "prefer-const": false,
         "quotemark": false,
-        "semicolon": [true, "always", "ignore-interfaces", "strict-bound-class-methods"],
+        "semicolon": [true, "always", "strict-bound-class-methods"],
         "space-before-function-paren": [true, {"anonymous": "always"}],
         "whitespace": [
             true,

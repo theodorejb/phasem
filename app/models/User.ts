@@ -1,28 +1,28 @@
 export interface User {
-    id: string,
-    fullName: string,
-    email: string,
-    dateCreated: string,
+    id: string;
+    fullName: string;
+    email: string;
+    dateCreated: string;
 }
 
 export interface LoginCredentials {
-    email: string,
-    password: string,
+    email: string;
+    password: string;
 }
 
 export interface NewUser extends LoginCredentials {
-    fullName: string,
+    fullName: string;
 }
 
 export interface UserProfile {
-    fullName: string,
+    fullName: string;
 }
 
 export interface UserEmail {
-    email: string,
+    email: string;
 }
 
 export interface PasswordChange {
-    currentPassword: string,
-    newPassword: string,
+    currentPassword: string;
+    newPassword: string;
 }
