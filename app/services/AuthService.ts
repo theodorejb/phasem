@@ -8,7 +8,7 @@ import {ApiService} from "./ApiService";
     providedIn: 'root',
 })
 export class AuthService {
-    constructor (private api: ApiService) {}
+    constructor(private api: ApiService) {}
 
     createUser(newUser: NewUser) {
         return this.api.requestBody('post', 'auth/user', newUser);

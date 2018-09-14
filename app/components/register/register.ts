@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {mergeMap} from 'rxjs/operators';
-import {AuthService} from "../../services/AuthService";
 import {NewUser} from "../../models/User";
+import {AuthService} from "../../services/AuthService";
 
 @Component({
     templateUrl: 'register.html',

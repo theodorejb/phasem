@@ -1,9 +1,9 @@
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
-import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
+import * as Cookies from 'es-cookie';
 import {Observable, of as rxOf, throwError} from 'rxjs';
 import {catchError, map, publishReplay, refCount, tap} from 'rxjs/operators';
-import * as Cookies from 'es-cookie';
 import {User} from '../models/User';
 
 interface RequestOptions {
@@ -28,7 +28,7 @@ export class ApiService {
     private newBuildAvailable: boolean = false;
     private lastBuildCheck: Date = new Date();
 
-    constructor (private http: HttpClient, private router: Router) {}
+    constructor(private http: HttpClient, private router: Router) {}
 
     private initializeBaseHeaders(): void {
         if (!this.baseHeaders) {

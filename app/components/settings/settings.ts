@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
+import {PasswordChange, User, UserEmail, UserProfile} from "../../models/User";
 import {ApiService} from "../../services/ApiService";
 import {UserService} from "../../services/UserService";
-import {PasswordChange, User, UserEmail, UserProfile} from "../../models/User";
 
 @Component({
     templateUrl: 'settings.html',

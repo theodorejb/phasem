@@ -1,10 +1,10 @@
-import {NgModule} from '@angular/core';
-import {BrowserModule, Title} from '@angular/platform-browser';
-import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
+import {NgModule} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {BrowserModule, Title} from '@angular/platform-browser';
 import {RouterModule} from '@angular/router';
-import {appComponents, appRoutes} from './routing';
 import {AppComponent} from './components/app/app';
+import {appComponents, appRoutes} from './routing';
 
 @NgModule({
     imports: [

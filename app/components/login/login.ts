@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
-import {AuthService} from "../../services/AuthService";
 import {LoginCredentials} from "../../models/User";
 import {ApiService} from "../../services/ApiService";
+import {AuthService} from "../../services/AuthService";
 
 @Component({
     templateUrl: 'login.html',

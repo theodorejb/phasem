@@ -5,8 +5,17 @@
     ],
     "jsRules": {},
     "rules": {
+        "array-bracket-spacing": [true, "never"],
         "array-type": false,
         "arrow-parens": [true, "ban-single-arg-parens"],
+        "block-spacing": [true, "never"],
+        "brace-style": [
+            true,
+            "1tbs",
+            {
+                "allowSingleLine": true
+            }
+        ],
         "forin": false,
         "indent": [true, "spaces", 4],
         "interface-name": [true, "never-prefix"],
@@ -15,19 +24,26 @@
         "member-access": false,
         "member-ordering": false,
         "no-console": [true, "log"],
+        "no-extra-semi": true,
+        "no-irregular-whitespace": true,
+        "no-multi-spaces": [true],
+        "no-var-keyword": false,
+        "object-curly-spacing": [true, "never"],
         "object-literal-key-quotes": [true, "as-needed"],
         "object-literal-shorthand": false,
         "object-literal-sort-keys": false,
-        "ordered-imports": [
-            true,
-            {
-                "import-sources-order": "any"
-            }
-        ],
         "prefer-const": false,
         "quotemark": false,
         "semicolon": [true, "always", "strict-bound-class-methods"],
-        "space-before-function-paren": [true, {"anonymous": "always"}],
+        "space-before-function-paren": [true, {
+            "anonymous": "always",
+            "asyncArrow": "always",
+            "constructor": "never",
+            "method": "never",
+            "named": "never"
+        }],
+        "ter-func-call-spacing": [true],
+        "ter-padded-blocks": [true, "never"],
         "whitespace": [
             true,
             "check-branch",
@@ -40,5 +56,7 @@
             "check-preblock"
         ]
     },
-    "rulesDirectory": []
+    "rulesDirectory": [
+        "node_modules/tslint-eslint-rules/dist/rules"
+    ]
 }

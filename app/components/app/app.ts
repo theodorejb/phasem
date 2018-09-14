@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
+import {Title} from '@angular/platform-browser';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {filter, map} from 'rxjs/operators';
-import {Title} from '@angular/platform-browser';
 import {ApiService} from '../../services/ApiService';
 
 @Component({

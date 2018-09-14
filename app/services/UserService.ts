@@ -6,7 +6,7 @@ import {ApiService} from "./ApiService";
     providedIn: 'root',
 })
 export class UserService {
-    constructor (private api: ApiService) {}
+    constructor(private api: ApiService) {}
 
     updateProfile(profile: UserProfile) {
         return this.api.requestBody('post', 'me/profile', profile);
