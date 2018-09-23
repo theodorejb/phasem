@@ -3,8 +3,9 @@
     "description": "Quickly get started with a PHP/Angular/Slim/Nginx/MySQL web app",
     "type": "project",
     "require": {
+        "ext-mbstring": "^7.2",
         "shrikeh/teapot": "^2.3.1",
-        "slim/slim": "^3.10.0",
+        "slim/slim": "^3.11.0",
         "theodorejb/peachy-sql": "^5.5.1"
     },
     "require-dev": {

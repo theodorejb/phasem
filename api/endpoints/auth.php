@@ -27,7 +27,8 @@ $app->post('/token', function (Request $request, Response $response) {
         throw new HttpException('Invalid email/password', StatusCode::UNAUTHORIZED);
     }
 
-    $token = (new \Phasem\db\AuthTokens())->insertToken($user);
+    $userAgent = $request->getHeaderLine('User-Agent');
+    $token = (new AuthTokens())->insertToken($user, $userAgent);
 
     return $response->withJson(['token' => $token]);
 });

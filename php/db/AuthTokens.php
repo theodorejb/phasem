@@ -18,11 +18,16 @@ class AuthTokens
         $this->db = DbConnector::getDatabase();
     }
 
-    public function insertToken(User $user): string
+    public function insertToken(User $user, string $userAgent): string
     {
         $token = self::generateToken();
         $parts = self::tokenParts($token);
         $now = (new \DateTime())->format(DbConnector::SQL_DATE);
+        $userAgentId = null;
+
+        if ($userAgent !== '') {
+            $userAgentId = (new UserAgents())->getUserAgentId($userAgent);
+        }
 
         $this->db->insertRow('auth_tokens', [
             'user_id' => $user->getId(),
@@ -31,6 +36,7 @@ class AuthTokens
             'auth_token_created' => $now,
             'auth_token_last_renewed' => $now,
             'auth_token_renew_count' => 0,
+            'user_agent_id' => $userAgentId,
         ]);
 
         return $token;

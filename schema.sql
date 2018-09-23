@@ -13,6 +13,12 @@ CREATE TABLE IF NOT EXISTS users (
     user_last_updated DATETIME NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS user_agents (
+    user_agent_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    user_agent VARCHAR(768) NOT NULL UNIQUE,
+    user_agent_created DATETIME NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS auth_tokens (
     auth_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     user_id INT UNSIGNED NOT NULL,
@@ -22,5 +28,7 @@ CREATE TABLE IF NOT EXISTS auth_tokens (
     auth_token_last_renewed DATETIME NOT NULL,
     auth_token_renew_count INT UNSIGNED NOT NULL,
     auth_token_deactivated DATETIME NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+    user_agent_id INT UNSIGNED NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_agent_id) REFERENCES user_agents(user_agent_id)
 );
