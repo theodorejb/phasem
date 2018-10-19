@@ -13,28 +13,29 @@
     "test": "mocha"
   },
   "dependencies": {
-    "@angular/common": "^6.1.8",
-    "@angular/compiler": "^6.1.8",
-    "@angular/compiler-cli": "^6.1.8",
-    "@angular/core": "^6.1.8",
-    "@angular/forms": "^6.1.8",
-    "@angular/platform-browser": "^6.1.8",
-    "@angular/router": "^6.1.8",
+    "@angular/common": "^7.0.2",
+    "@angular/compiler": "^7.0.2",
+    "@angular/compiler-cli": "^7.0.2",
+    "@angular/core": "^7.0.2",
+    "@angular/forms": "^7.0.2",
+    "@angular/platform-browser": "^7.0.2",
+    "@angular/router": "^7.0.2",
     "core-js": "^2.5.7",
     "es-cookie": "^1.2.0",
-    "rxjs": "^6.3.2",
+    "rxjs": "^6.3.3",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
+    "@angular-devkit/build-optimizer": "^0.10.4",
     "grunt": "^1.0.3",
     "grunt-npmcopy": "^0.1.0",
-    "html-webpack-include-assets-plugin": "^1.0.5",
+    "html-webpack-include-assets-plugin": "^1.0.6",
     "html-webpack-plugin": "^3.2.0",
     "mocha": "^5.2.0",
     "tslint": "^5.11.0",
     "tslint-eslint-rules": "^5.4.0",
-    "typescript": "^2.9.2",
-    "webpack": "^4.19.1",
-    "webpack-cli": "^3.1.1"
+    "typescript": "^3.1.6",
+    "webpack": "^4.25.1",
+    "webpack-cli": "^3.1.2"
   }
 }

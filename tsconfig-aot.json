@@ -5,7 +5,7 @@
     "app/main.ts"
   ],
   "angularCompilerOptions": {
-    "preserveWhitespaces": false,
+    "fullTemplateTypeCheck": true,
     "skipMetadataEmit": true
   }
 }
