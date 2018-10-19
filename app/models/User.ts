@@ -10,6 +10,11 @@ export interface LoginCredentials {
     password: string;
 }
 
+export interface LoginResponse {
+    token: string;
+    isMfaEnabled: boolean;
+}
+
 export interface NewUser extends LoginCredentials {
     fullName: string;
 }

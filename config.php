@@ -12,4 +12,5 @@ return [
         'database' => 'phasem',
     ],
     'devMode' => true,
+    'encryptionKey' => '', // generate with vendor\bin\generate-defuse-key and set in config.user.php
 ];

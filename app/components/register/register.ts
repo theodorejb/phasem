@@ -30,7 +30,10 @@ export class RegisterComponent {
         this.authService.createUser(this.newUser)
             .pipe(
                 mergeMap(() => this.authService.logIn(this.newUser)),
-                mergeMap(() => this.api.getCurrentUser()),
+                mergeMap(resp => {
+                    this.api.setAuth(resp.token, true);
+                    return this.api.getCurrentUser();
+                }),
             )
             .subscribe(
                 () => {

@@ -92,21 +92,26 @@ export class ApiService {
                         message = err.error.message;
                     } else {
                         // backend returned an unsuccessful response code
-
-                        if (err.status === 401) {
-                            // invalid auth token
-                            this.unsetCurrentUser();
-
-                            if (this.router.url !== '/login') {
-                                this.setRedirectUrl(this.router.url);
-                                this.router.navigate(['/login']);
-                            }
-                        }
-
                         let errorResp = err.error;
 
                         if (errorResp.error) {
                             message = errorResp.error;
+                        }
+
+                        if (err.status === 401) {
+                            let authUrl = '/login';
+
+                            if (message === 'Two-factor authentication code required') {
+                                authUrl = '/confirm-mfa';
+                            } else {
+                                // invalid auth token
+                                this.unsetCurrentUser();
+                            }
+
+                            if (this.router.url !== authUrl) {
+                                this.setRedirectUrl(this.router.url);
+                                this.router.navigate([authUrl]);
+                            }
                         }
 
                         if (!message) {
@@ -126,13 +131,20 @@ export class ApiService {
             );
     }
 
+    requestType<T>(method: string, url: string, options: RequestOptions = {}) {
+        return this.request(method, url, options) as Observable<T>;
+    }
+
     requestBody(method: string, url: string, object: {[key: string]: any}) {
         return this.request(method, url, {body: object});
     }
 
-    setAuth(token: string): void {
-        this.currentUser = this.currentUserObs = null;
-        Cookies.set('ApiAuth', token, {expires: 30});
+    setAuth(token: string, clearUser: boolean): void {
+        if (clearUser) {
+            this.currentUser = this.currentUserObs = null;
+        }
+
+        Cookies.set('ApiAuth', token, {expires: 91});
         this.baseHeaders = null;
     }
 
@@ -176,8 +188,10 @@ export class ApiService {
         this.redirectUrl = url;
     }
 
-    getRedirectUrl(): string | null {
-        return this.redirectUrl;
+    defaultRedirect() {
+        let redirectUrl = this.redirectUrl || '/settings';
+        this.redirectUrl = null;
+        this.router.navigate([redirectUrl]);
     }
 
     isNewBuildAvailable(): boolean {

@@ -1,0 +1,26 @@
+<h3>Two-factor recovery codes</h3>
+
+<p class="error">{{error}}</p>
+
+<p>Recovery codes can be used to access your account in the event you lose
+    access to your device and cannot receive two-factor authentication codes.
+</p>
+
+<p>
+    Treat your recovery codes with the same level of care as you would your password!
+    We recommend saving them with a password manager such as Lastpass, 1Password, or Keeper.
+</p>
+
+<p class="warning">
+    <strong>Put these in a safe spot.</strong>
+    If you lose your device and don't have the recovery codes you will lose access to your account.
+</p>
+
+<ul>
+    <li *ngFor="let code of backupCodes">{{code}}</li>
+</ul>
+
+<p>When you generate new recovery codes, you must download or print the new codes. Your old codes won't work anymore.</p>
+<p>
+    <button [ladda]="isGenerating" (click)="generateNewCodes()">Generate new recovery codes</button>
+</p>

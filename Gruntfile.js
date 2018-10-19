@@ -7,6 +7,7 @@ module.exports = function(grunt) {
                     destPrefix: 'public/dist/js',
                 },
                 files: {
+                    'ladda/ladda-themeless.min.css': 'ladda/dist/ladda-themeless.min.css',
                     'core-js/shim.min.js': 'core-js/client/shim.min.js',
                     'zone.js/zone.min.js': 'zone.js/dist/zone.min.js',
                 },

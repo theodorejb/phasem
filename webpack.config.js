@@ -1,6 +1,6 @@
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
-var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+var TerserPlugin = require('terser-webpack-plugin');
 var path = require('path');
 
 var config = {
@@ -14,8 +14,9 @@ var config = {
     },
     optimization: {
         minimizer: [
-            new UglifyJsPlugin({
+            new TerserPlugin({
                 extractComments: true,
+                parallel: true,
             }),
         ],
     },
@@ -26,6 +27,7 @@ var config = {
         }),
         new HtmlWebpackIncludeAssetsPlugin({
             assets: [
+                'dist/js/ladda/ladda-themeless.min.css',
                 'css/base_styles.css',
                 'dist/js/core-js/shim.min.js',
                 'dist/js/zone.js/zone.min.js',

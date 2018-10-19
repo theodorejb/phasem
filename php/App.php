@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Phasem;
 
+use Defuse\Crypto\{Crypto, Key};
 use Phasem\model\User;
 
 class App
@@ -36,5 +37,17 @@ class App
     public static function getUser(): ?User
     {
         return self::$user;
+    }
+
+    public static function encrypt(string $plaintext, bool $rawBinary = false): string
+    {
+        $key = Key::loadFromAsciiSafeString(self::getConfig()['encryptionKey']);
+        return Crypto::encrypt($plaintext, $key, $rawBinary);
+    }
+
+    public static function decrypt(string $ciphertext, bool $rawBinary = false): string
+    {
+        $key = Key::loadFromAsciiSafeString(self::getConfig()['encryptionKey']);
+        return Crypto::decrypt($ciphertext, $key, $rawBinary);
     }
 }

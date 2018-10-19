@@ -8,15 +8,15 @@
 
     <div *ngIf="api.currentUser" class="userLinks">
         {{api.currentUser.fullName}}
-        <a [routerLink]="['/']">Home</a>
-        <a [routerLink]="['/settings']">Settings</a>
-        <a [routerLink]="['/logout']">Sign out</a>
+        <a routerLink="/">Home</a>
+        <a routerLink="/settings">Settings</a>
+        <a routerLink="/logout">Sign out</a>
     </div>
 
     <div *ngIf="!api.currentUser" class="userLinks">
-        <a [routerLink]="['/']">Home</a>
-        <a [routerLink]="['/register']">Register</a>
-        <a [routerLink]="['/login']">Sign in</a>
+        <a routerLink="/">Home</a>
+        <a routerLink="/register">Register</a>
+        <a routerLink="/login">Sign in</a>
     </div>
 </header>
 

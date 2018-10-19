@@ -1,0 +1,21 @@
+<h3>1. Save recovery codes</h3>
+
+<p class="error">{{error}}</p>
+
+<p class="warning">Recovery codes are necessary to access your account in the event
+    you cannot receive two-factor authentication codes.</p>
+<p>Save or print these recovery codes before continuing two-factor authentication setup.</p>
+
+<ul>
+    <li *ngFor="let code of backupCodes">{{code}}</li>
+</ul>
+
+<p>
+    <strong>Treat your recovery codes with the same level of care as you would your password!</strong>
+    We recommend saving them with a password manager such as Lastpass, 1Password, or Keeper.
+</p>
+
+<p>
+    <a class="proceed button" routerLink="../verify">Okay, I saved the recovery codes</a>
+    <a class="button" routerLink="../../">Cancel</a>
+</p>

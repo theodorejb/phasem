@@ -3,6 +3,7 @@ import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {RouterModule} from '@angular/router';
+import {LaddaModule} from 'angular2-ladda';
 import {AppComponent} from './components/app/app';
 import {appComponents, appRoutes} from './routing';
 
@@ -11,6 +12,9 @@ import {appComponents, appRoutes} from './routing';
         BrowserModule,
         FormsModule,
         HttpClientModule,
+        LaddaModule.forRoot({
+            style: 'expand-right',
+        }),
         RouterModule.forRoot(appRoutes),
     ],
     declarations: [

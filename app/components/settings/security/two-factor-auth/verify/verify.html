@@ -1,0 +1,25 @@
+<h3>2. Scan this barcode with your app</h3>
+
+<p class="error">{{error}}</p>
+<p>
+    If you can't use a barcode, <span class="link" (click)="toggleSecret()">enter this text code</span>
+    instead<span *ngIf="!showSecret">.</span><span *ngIf="showSecret">: {{secret.secret}}</span>
+</p>
+
+<form *ngIf="secret" ngNativeValidate (submit)="enableMfa()">
+    <p class="smallImageContainer">
+        <img src="data:image/png;base64,{{secret.qrCode}}" alt="QR code"/>
+    </p>
+
+    <p>After scanning the barcode image, the app will display a six-digit code that you can enter below.</p>
+
+    <div class="formSection">
+        <label for="code-input">Enter the six-digit code from the application</label>
+        <input id="code-input" type="text" name="code" [(ngModel)]="code" placeholder="123456" required/>
+    </div>
+
+    <p>
+        <button class="proceed" [ladda]="enablingMfa">Enable</button>
+        <a class="button" routerLink="../../">Cancel</a>
+    </p>
+</form>

@@ -1,0 +1,18 @@
+<h2>Two factor authentication</h2>
+
+<p class="error">{{error}}</p>
+
+<p>Open the two-factor authentication app on your device to view your authentication code and verify your identity.</p>
+
+<form ngNativeValidate (submit)="verifyMfa()">
+    <div class="formSection">
+        <label for="code-input">Authentication code</label>
+        <!-- Number input can't be used since it trims leading zeros -->
+        <input id="code-input" type="text" name="code" [(ngModel)]="code" required/>
+    </div>
+    <div class="formSection">
+        <button [ladda]="submitting">Verify</button>
+    </div>
+</form>
+
+<p>If you don't have your device, enter one of your two-factor recovery codes instead.</p>

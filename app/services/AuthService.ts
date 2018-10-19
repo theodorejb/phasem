@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Observable, of as rxOf} from 'rxjs';
 import {map, mergeMap, tap} from 'rxjs/operators';
-import {LoginCredentials, NewUser} from '../models/User';
+import {LoginCredentials, LoginResponse, NewUser} from '../models/User';
 import {ApiService} from "./ApiService";
 
 @Injectable({
@@ -15,10 +15,7 @@ export class AuthService {
     }
 
     logIn(credentials: LoginCredentials) {
-        return this.api.requestBody('post', 'auth/token', credentials)
-            .pipe(
-                map((resp: {token: string}) => {this.api.setAuth(resp.token);}),
-            );
+        return this.api.requestType<LoginResponse>('post', 'auth/token', {body: credentials});
     }
 
     logOut(): Observable<boolean> {

@@ -21,10 +21,11 @@ and a RESTful API.
 * User registration
 * Token-based authentication
 * Account settings page (change name, email, and password)
+* Two-factor authentication with recovery codes
 * Users are prompted to reload the page when a front-end update is available
 
 ## Todo
 
+- [ ] Zero downtime deployment
 - [ ] Reset password via email
-- [ ] Two-factor authentication
-- [ ] Offline support
+- [ ] Progressive web app manifest

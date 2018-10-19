@@ -15,7 +15,7 @@ class UserAgents
 
     public function getUserAgentId(string $userAgent): int
     {
-        $userAgent = mb_substr($userAgent, 0, 768);
+        $userAgent = self::trimUserAgent($userAgent);
         $existing = $this->db->selectFrom('SELECT user_agent_id FROM user_agents')
             ->where(['user_agent' => $userAgent])->query()->getFirst();
 
@@ -34,5 +34,10 @@ class UserAgents
         ];
 
         return $this->db->insertRow('user_agents', $row)->getId();
+    }
+
+    public static function trimUserAgent(string $userAgent): string
+    {
+        return mb_substr($userAgent, 0, 768);
     }
 }

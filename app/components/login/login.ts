@@ -27,16 +27,14 @@ export class LoginComponent {
 
         this.authService.logIn(this.loginData)
             .subscribe(
-                () => {
-                    let redirectUrl = this.apiService.getRedirectUrl();
+                resp => {
+                    this.apiService.setAuth(resp.token, true);
 
-                    if (!redirectUrl) {
-                        redirectUrl = '/settings';
+                    if (resp.isMfaEnabled) {
+                        this.router.navigate(['/confirm-mfa']);
                     } else {
-                        this.apiService.setRedirectUrl(null);
+                        this.apiService.defaultRedirect();
                     }
-
-                    this.router.navigate([redirectUrl]);
                 },
                 error => {this.error = error;},
             )

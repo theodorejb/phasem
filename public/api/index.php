@@ -16,12 +16,13 @@ $app = new Slim\App($container);
 $authMiddleware = require '../../api/middleware/auth.php';
 
 // endpoints with standard authorization
-$app->group('', function () use ($app) {
+$app->group('', function (\Slim\App $app) {
     require '../../api/endpoints/me.php';
+    require '../../api/endpoints/two_factor_auth.php';
 })->add($authMiddleware);
 
 // endpoints without standard authorization
-$app->group('/auth', function () use ($app) {
+$app->group('/auth', function (\Slim\App $app) {
     require '../../api/endpoints/auth.php';
 });
 

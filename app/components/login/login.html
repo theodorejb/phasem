@@ -12,6 +12,6 @@
         <input id="password-input" type="password" name="password" [(ngModel)]="loginData.password" required/>
     </div>
     <div class="formSection">
-        <button>{{submitting ? 'Signing in...' : 'Sign in'}}</button>
+        <button [ladda]="submitting">Sign in</button>
     </div>
 </form>

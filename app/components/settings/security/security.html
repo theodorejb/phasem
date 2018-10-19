@@ -1,0 +1,22 @@
+<h3>Two factor authentication</h3>
+
+<p>
+    Two-factor authentication adds another layer of security to your account by requiring more than just a password to log in.
+</p>
+
+<p class="error">{{error}}</p>
+
+<table *ngIf="status" class="cleanTable">
+    <tbody>
+    <tr>
+        <th>Authenticator app</th>
+        <td class="statusText">{{status.isMfaEnabled ? 'Enabled' : 'Not configured'}}</td>
+        <td><a class="button" routerLink="two-factor-auth">{{status.isMfaEnabled ? 'Edit' : 'Add'}}</a></td>
+    </tr>
+    <tr *ngIf="status.backupsLastViewed">
+        <th>Recovery codes</th>
+        <td class="statusText">{{status.unusedBackupCount}} remaining. Last viewed on {{status.backupsLastViewed | date:'medium'}}</td>
+        <td><a class="button" routerLink="two-factor-recovery">Show</a></td>
+    </tr>
+    </tbody>
+</table>

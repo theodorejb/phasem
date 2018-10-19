@@ -57,7 +57,8 @@ form {
     margin-bottom: 0.5em;
 }
 
-.formSection input[type="text"], .formSection input[type="email"], .formSection input[type="password"] {
+.formSection input[type="text"], .formSection input[type="number"],
+.formSection input[type="email"], .formSection input[type="password"] {
     width: 20em;
 }
 
@@ -65,8 +66,139 @@ form {
     display: block;
     font-weight: bold;
     font-size: 0.875em;
+    margin-bottom: 0.375em;
 }
 
 .formSection input + button {
     margin-left: 0.5em;
+}
+
+.tabs > ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.tabs li {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.tabs li a {
+    border: 1px solid #999;
+    text-decoration: none;
+    display: block;
+    padding: 0.5em;
+    color: #000;
+}
+
+.tabs li a:hover {
+    background: #dedede;
+}
+
+.tabs li a:active {
+    color: #fff;
+    background: #444;
+    border-color: #444;
+}
+
+.tabs li.selected a {
+    color: #fff;
+    background: #707070;
+    border-color: #707070;
+}
+
+.cleanTable {
+    border: 1px solid #aaa;
+    border-collapse: collapse;
+}
+
+.cleanTable th {
+    text-align: left;
+}
+
+.cleanTable td, .cleanTable th {
+    padding: 0.5em 0.75em;
+}
+
+.statusText {
+    color: #424242;
+    font-size: 0.875em;
+}
+
+.smallText {
+    font-size: 0.75em;
+    max-width: 28rem;
+    text-align: justify;
+}
+
+.warning {
+    background: #f5ecb4;
+    color: #5f5645;
+    padding: 1em;
+    border: 1px solid #bbb;
+    border-radius: 2px;
+}
+
+p {
+    margin: 1.5em 0;
+}
+
+.link {
+    color: #0000ee;
+    cursor: pointer;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+button, .button {
+    padding: 0.5em 0.75em;
+    background: #e3e3e3;
+    cursor: pointer;
+    border: 1px solid #777;
+    border-radius: 0.125em;
+    font-size: 0.875em;
+    font-family: inherit;
+    display: inline-block;
+    color: #111;
+    text-decoration: none;
+}
+
+button:hover, .button:hover {
+    background: #d3d3d3;
+}
+
+button:active, .button:active {
+    background: #444;
+    border-color: #444;
+    color: #fff;
+}
+
+button[disabled], button[disabled]:hover, button[disabled]:active {
+    color: #777;
+    background: #e3e3e3;
+}
+
+.proceed {
+    font-size: 1em;
+    padding: .75em 2em;
+    background: #009132;
+    color: #fff;
+    border: 1px solid #005d1f;
+    margin-right: 1em;
+    margin-bottom: 1em;
+}
+
+.proceed:hover {
+    background: #00a234;
+}
+
+.proceed:active {
+    background: #007f2f;
+}
+
+.proceed[disabled], .proceed[disabled]:hover, .proceed[disabled]:active {
+    color: #fff;
+    background: #52a467;
 }

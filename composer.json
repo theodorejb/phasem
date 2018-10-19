@@ -3,7 +3,10 @@
     "description": "Quickly get started with a PHP/Angular/Slim/Nginx/MySQL web app",
     "type": "project",
     "require": {
+        "ext-gd": "^7.2",
         "ext-mbstring": "^7.2",
+        "defuse/php-encryption": "^2.2",
+        "paragonie/multi-factor": "^0.2.2",
         "shrikeh/teapot": "^2.3.1",
         "slim/slim": "^3.11.0",
         "theodorejb/peachy-sql": "^5.5.1"

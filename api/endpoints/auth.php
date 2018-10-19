@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Phasem\db\{AuthTokens, Users};
+use Phasem\db\{AuthTokens, MfaKeys, Users};
 use Slim\Http\{Request, Response};
 use Teapot\{HttpException, StatusCode};
 
@@ -29,16 +29,20 @@ $app->post('/token', function (Request $request, Response $response) {
 
     $userAgent = $request->getHeaderLine('User-Agent');
     $token = (new AuthTokens())->insertToken($user, $userAgent);
+    $key = (new MfaKeys())->getEnabledMfaKey($user->getId());
 
-    return $response->withJson(['token' => $token]);
+    return $response->withJson([
+        'token' => $token,
+        'isMfaEnabled' => $key !== null,
+    ]);
 });
 
 // deactivate a valid token (log out)
 $app->delete('/token', function (Request $request, Response $response) {
     try {
         $authTokens = new AuthTokens();
-        $authId = $authTokens->validateRequestAuth($request, false);
-        $authTokens->deactivateToken($authId);
+        $authTokens->validateRequestAuth($request, false);
+        $authTokens->deactivateToken(\Phasem\App::getUser()->getAuthId());
         return $response->withStatus(StatusCode::NO_CONTENT);
     } catch (Exception $e) {
         return $response
