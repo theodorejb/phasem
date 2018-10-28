@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {mergeMap} from 'rxjs/operators';
 import {NewUser} from "../../models/User";
+import {ApiService} from "../../services/ApiService";
 import {AuthService} from "../../services/AuthService";
 
 @Component({
@@ -18,6 +19,7 @@ export class RegisterComponent {
     };
 
     constructor(
+        private api: ApiService,
         private authService: AuthService,
         private router: Router,
     ) {}
@@ -28,6 +30,7 @@ export class RegisterComponent {
         this.authService.createUser(this.newUser)
             .pipe(
                 mergeMap(() => this.authService.logIn(this.newUser)),
+                mergeMap(() => this.api.getCurrentUser()),
             )
             .subscribe(
                 () => {
