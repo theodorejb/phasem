@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {Router} from '@angular/router';
 import {MfaSecret} from "../../../../../models/MFA";
 import {ApiService} from "../../../../../services/ApiService";
@@ -13,8 +14,10 @@ export class VerifyComponent implements OnInit {
     public enablingMfa = false;
     public showSecret = false;
     public code = '';
+    public qrCode: SafeHtml;
 
     constructor(
+        private sanitizer: DomSanitizer,
         private apiService: ApiService,
         private mfaService: MfaService,
         private router: Router,
@@ -24,6 +27,7 @@ export class VerifyComponent implements OnInit {
         this.mfaService.setupMfaSecret().subscribe(
             secret => {
                 this.secret = secret;
+                this.qrCode = this.sanitizer.bypassSecurityTrustHtml(secret.qrCode);
             },
             error => {
                 if (error === 'No two-factor setup found. Please attempt setup again.') {

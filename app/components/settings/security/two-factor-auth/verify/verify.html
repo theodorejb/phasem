@@ -7,10 +7,7 @@
 </p>
 
 <form *ngIf="secret" ngNativeValidate (submit)="enableMfa()">
-    <p class="smallImageContainer">
-        <img src="data:image/png;base64,{{secret.qrCode}}" alt="QR code"/>
-    </p>
-
+    <p class="smallImageContainer" [innerHTML]="qrCode"></p>
     <p>After scanning the barcode image, the app will display a six-digit code that you can enter below.</p>
 
     <div class="formSection">
