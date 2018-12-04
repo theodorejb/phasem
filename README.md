@@ -10,7 +10,7 @@ and a RESTful API.
 3. Start MySQL and enable MySQL extension in php.ini
 4. Include phasem.conf file in nginx.conf http block
 5. From nginx directory, run `start nginx` and `php-cgi -b 127.0.0.1:9000`
-6. Run `composer install` and `npm install`
+6. Run `composer install`, `npm install`, and `npm run build`
 7. Run PHP tests via `vendor\bin\phpunit`
 
 ## Features

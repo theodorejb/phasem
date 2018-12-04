@@ -1,3 +1,4 @@
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
 var TerserPlugin = require('terser-webpack-plugin');
@@ -21,6 +22,13 @@ var config = {
         ],
     },
     plugins: [
+        new CopyWebpackPlugin([
+            {from: 'ladda/dist/ladda-themeless.min.css', to: 'dist/js/ladda'},
+            {from: 'core-js/client/shim.min.js', to: 'dist/js/core-js'},
+            {from: 'zone.js/dist/zone.min.js', to: 'dist/js/zone.js/zone.min.js'},
+        ], {
+            context: path.resolve(__dirname, './node_modules'),
+        }),
         new HtmlWebpackPlugin({
             template: 'public/index_template.html',
             hash: true,
