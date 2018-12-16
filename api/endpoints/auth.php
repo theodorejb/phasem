@@ -24,7 +24,7 @@ $app->post('/token', function (Request $request, Response $response) {
     $user = (new Users())->getUserByEmail($data['email']);
 
     if ($user === null || !$user->verifyPassword($data['password'])) {
-        throw new HttpException('Invalid email/password', StatusCode::UNAUTHORIZED);
+        throw new HttpException('Invalid login request', StatusCode::UNAUTHORIZED);
     }
 
     $userAgent = $request->getHeaderLine('User-Agent');

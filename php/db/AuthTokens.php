@@ -49,6 +49,17 @@ class AuthTokens
         $this->db->updateRows('auth_tokens', $set, ['auth_id' => $authId]);
     }
 
+    public function deactivateOtherTokens(User $user): void
+    {
+        $set = ['auth_token_deactivated' => (new DateTime())->format(DbConnector::SQL_DATE)];
+
+        $this->db->updateRows('auth_tokens', $set, [
+            'user_id' => $user->getId(),
+            'auth_token_deactivated' => ['nu' => ''],
+            'auth_id' => ['ne' => $user->getAuthId()],
+        ]);
+    }
+
     public function validateRequestAuth(Request $request, bool $autoRenew): void
     {
         $authHeader = $request->getHeaderLine('Authorization');

@@ -26,6 +26,11 @@ and a RESTful API.
 
 ## Todo
 
+- [ ] Track invalid login attempts with IP and headers
+- [ ] Rate limiting for incorrect passwords
+- [ ] Show password strength when registering and changing password
+- [ ] Allow users to view active sessions with login date, last activity date, and IP address
+- [ ] Display account security events (login, 2FA completion, recovery code used, invalid login/2FA)
+- [ ] Reset password via email (don't leak valid emails)
 - [ ] Zero downtime deployment
-- [ ] Reset password via email
 - [ ] Progressive web app manifest

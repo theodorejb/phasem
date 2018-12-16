@@ -29,6 +29,7 @@ class Users
         $user = $this->getUserByEmail($data['email']);
 
         if ($user !== null) {
+            // todo: don't leak valid emails - instead send email to complete registration and always display same message
             throw new HttpException('An account with this email already exists. Try logging in instead.', StatusCode::CONFLICT);
         }
 
@@ -67,6 +68,7 @@ class Users
             throw new HttpException('Missing required email property');
         }
 
+        // todo: consider sending a confirmation link to the email to avoid leaking valid emails for other users
         self::validateEmail($data['email']);
         $userWithEmail = $this->getUserByEmail($data['email']);
 
@@ -88,6 +90,7 @@ class Users
             throw new HttpException('currentPassword and newPassword properties are required');
         }
 
+        // todo: rate limit these attempts
         if (!$user->verifyPassword($data['currentPassword'])) {
             throw new HttpException('Current password is invalid');
         }
@@ -100,6 +103,8 @@ class Users
         ];
 
         $this->db->updateRows('users', $set, ['user_id' => $user->getId()]);
+
+        (new AuthTokens())->deactivateOtherTokens($user);
     }
 
     public function getUserByEmail(string $email): ?User

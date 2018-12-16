@@ -8,6 +8,7 @@ import {UserService} from "../../../services/UserService";
 })
 export class AccountComponent implements OnInit {
     public error: string;
+    public success: string;
     public user: User;
     public profile: UserProfile;
     public updatingProfile: boolean = false;
@@ -15,6 +16,11 @@ export class AccountComponent implements OnInit {
     public updatingEmail: boolean = false;
     public pwChange: PasswordChange;
     public changingPassword: boolean = false;
+
+    private errorHandler = (error: string) => {
+        this.error = error;
+        this.success = '';
+    };
 
     constructor(
         private api: ApiService,
@@ -39,7 +45,7 @@ export class AccountComponent implements OnInit {
                     newPassword: '',
                 };
             },
-            error => {this.error = error;},
+            this.errorHandler,
         );
     }
 
@@ -52,8 +58,9 @@ export class AccountComponent implements OnInit {
                     this.user.fullName = this.profile.fullName;
                     this.api.currentUser = this.user;
                     this.error = '';
+                    this.success = 'Successfully updated profile';
                 },
-                error => {this.error = error;},
+                this.errorHandler,
             )
             .add(() => {this.updatingProfile = false;});
     }
@@ -67,8 +74,9 @@ export class AccountComponent implements OnInit {
                     this.user.email = this.userEmail.email;
                     this.api.currentUser = this.user;
                     this.error = '';
+                    this.success = 'Successfully updated email';
                 },
-                error => {this.error = error;},
+                this.errorHandler,
             )
             .add(() => {this.updatingEmail = false;});
     }
@@ -80,8 +88,9 @@ export class AccountComponent implements OnInit {
             .subscribe(
                 () => {
                     this.pwChange.newPassword = this.pwChange.currentPassword = this.error = '';
+                    this.success = 'Successfully changed password';
                 },
-                error => {this.error = error;},
+                this.errorHandler,
             )
             .add(() => {this.changingPassword = false;});
     }
