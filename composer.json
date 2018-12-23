@@ -3,16 +3,17 @@
     "description": "Quickly get started with a PHP/Angular/Slim/Nginx/MySQL web app",
     "type": "project",
     "require": {
-        "ext-gd": "^7.2",
-        "ext-mbstring": "^7.2",
+        "ext-gd": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
         "defuse/php-encryption": "^2.2",
         "paragonie/multi-factor": "^0.2.2",
         "shrikeh/teapot": "^2.3.1",
-        "slim/slim": "^3.11.0",
-        "theodorejb/peachy-sql": "^5.5.1"
+        "slim/slim": "^3.12.0",
+        "theodorejb/peachy-sql": "^6.0.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.0"
+        "phpunit/phpunit": "^7.5.2"
     },
     "autoload": {
         "psr-4": {"Phasem\\": "php/"}
