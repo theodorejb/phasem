@@ -34,6 +34,27 @@ CREATE TABLE IF NOT EXISTS auth_tokens (
     FOREIGN KEY (user_agent_id) REFERENCES user_agents(user_agent_id)
 );
 
+CREATE TABLE api_endpoints (
+    endpoint_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    host varchar(30) not null,
+    path varchar(738) not null,
+    CONSTRAINT unique_host_path UNIQUE (host, path)
+);
+
+CREATE TABLE api_requests (
+    request_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    auth_id INT UNSIGNED NOT NULL,
+    method varchar(7) NOT NULL,
+    endpoint_id INT UNSIGNED NOT NULL,
+    processing_ended DATETIME NOT NULL,
+    process_time_ms INT UNSIGNED NOT NULL,
+    params JSON,
+    error varchar(8000),
+    INDEX endpoint_date (endpoint_id, processing_ended),
+    FOREIGN KEY (auth_id) REFERENCES auth_tokens(auth_id),
+    FOREIGN KEY (endpoint_id) REFERENCES api_endpoints(endpoint_id)
+);
+
 CREATE TABLE IF NOT EXISTS mfa_keys (
     key_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     user_id INT UNSIGNED NOT NULL,

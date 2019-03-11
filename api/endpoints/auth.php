@@ -21,6 +21,7 @@ $app->post('/token', function (Request $request, Response $response) {
         throw new HttpException('Email and password cannot be blank');
     }
 
+    // todo: log failed login attempts in database with IP address
     $user = (new Users())->getUserByEmail($data['email']);
 
     if ($user === null || !$user->verifyPassword($data['password'])) {

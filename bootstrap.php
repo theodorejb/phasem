@@ -11,6 +11,8 @@ date_default_timezone_set('UTC');
 // Composer autoloading
 require 'vendor/autoload.php';
 
+\Phasem\App::setRequestTime();
+
 // read config
 $config = require 'config.php';
 

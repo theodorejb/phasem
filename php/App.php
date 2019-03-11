@@ -11,8 +11,24 @@ class App
 {
     private static $config;
     private static $user;
+    private static $requestTime;
 
-    public static function setConfig(array $config)
+    public static function setRequestTime(): void
+    {
+        self::$requestTime = hrtime(true);
+    }
+
+    public static function getRequestTimeMs(): int
+    {
+        if (self::$requestTime === null) {
+            throw new \Exception('Request time has not been set');
+        }
+
+        $ns = hrtime(true) - self::$requestTime;
+        return (int)($ns / 1000000);
+    }
+
+    public static function setConfig(array $config): void
     {
         self::$config = $config;
     }
@@ -29,7 +45,7 @@ class App
         }
     }
 
-    public static function setUser(?User $user)
+    public static function setUser(?User $user): void
     {
         self::$user = $user;
     }
@@ -49,5 +65,22 @@ class App
     {
         $key = Key::loadFromAsciiSafeString(self::getConfig()['encryptionKey']);
         return Crypto::decrypt($ciphertext, $key, $rawBinary);
+    }
+
+    public static function hashSensitiveKeys(array $data): array
+    {
+        $properties = [
+            'password',
+            'newPassword',
+            'currentPassword',
+        ];
+
+        foreach ($properties as $property) {
+            if (isset($data[$property]) && $data[$property] !== '') {
+                $data[$property] = hash('sha256', $data[$property]);
+            }
+        }
+
+        return $data;
     }
 }

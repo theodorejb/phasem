@@ -15,6 +15,9 @@ require '../../api/errorHandlers.php';
 $app = new Slim\App($container);
 $authMiddleware = require '../../api/middleware/auth.php';
 
+$outerMiddleware = require '../../api/middleware/headers.php';
+$app->add($outerMiddleware);
+
 // endpoints with standard authorization
 $app->group('', function (\Slim\App $app) {
     require '../../api/endpoints/me.php';
