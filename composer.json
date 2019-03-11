@@ -1,5 +1,4 @@
 {
-    "name": "phasem",
     "description": "Quickly get started with a PHP/Angular/Slim/Nginx/MySQL web app",
     "type": "project",
     "require": {
