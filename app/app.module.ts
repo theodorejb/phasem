@@ -5,6 +5,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {RouterModule} from '@angular/router';
 import {LaddaModule} from 'angular2-ladda';
 import {AppComponent} from './components/app/app';
+import {AutofocusDirective} from "./directives/autofocus";
 import {appComponents, appRoutes} from './routing';
 
 @NgModule({
@@ -20,6 +21,7 @@ import {appComponents, appRoutes} from './routing';
     declarations: [
         AppComponent,
         ...appComponents,
+        AutofocusDirective,
     ],
     bootstrap: [AppComponent],
 })

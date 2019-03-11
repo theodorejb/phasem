@@ -8,7 +8,7 @@
     <div class="formSection">
         <label for="code-input">Authentication code</label>
         <!-- Number input can't be used since it trims leading zeros -->
-        <input id="code-input" type="text" name="code" [(ngModel)]="code" required/>
+        <input id="code-input" type="text" name="code" [(ngModel)]="code" required appAutofocus/>
     </div>
     <div class="formSection">
         <button [ladda]="submitting">Verify</button>
