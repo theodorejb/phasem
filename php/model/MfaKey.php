@@ -46,10 +46,10 @@ class MfaKey
         $this->backupsLastViewed = new DateTimeImmutable($row['backups_last_viewed']);
     }
 
-    private function getSeed()
+    private function getSeed(): string
     {
         // only decrypt the secret if it is used
-        if (is_null($this->_seed)) {
+        if ($this->_seed === null) {
             $this->_seed = App::decrypt($this->secret);
         }
 
@@ -188,8 +188,7 @@ class MfaKey
     }
 
     /**
-     * Returns a Base64 encoded PNG image
-     * Note: this method requires that the PHP GD extension be enabled
+     * Returns an SVG image
      */
     public function makeQrCode(string $email): string
     {

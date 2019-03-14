@@ -82,7 +82,7 @@ $app->group('/two_factor_auth', function (\Slim\App $app) {
         $key = $mfaKeys->getEnabledMfaKey($user->getId());
 
         if ($key === null) {
-            throw new HttpException('Multi-factor authentication is not enabled for this account');
+            throw new HttpException('Two-factor authentication is not enabled for this account');
         }
 
         // an enabled key exists - verify the code
@@ -136,8 +136,8 @@ $app->group('/two_factor_auth', function (\Slim\App $app) {
         $mfaKeys = new MfaKeys();
         $key = $mfaKeys->getEnabledMfaKey(\Phasem\App::getUser()->getId());
 
-        if (is_null($key)) {
-            throw new HttpException('Multi-factor authentication is already not enabled');
+        if ($key === null) {
+            throw new HttpException('Two-factor authentication is already not enabled');
         }
 
         $mfaKeys->disableMfaKey($key);
@@ -150,7 +150,7 @@ $app->group('/two_factor_auth', function (\Slim\App $app) {
             $mfaKeys = new MfaKeys();
             $key = $mfaKeys->getEnabledMfaKey(\Phasem\App::getUser()->getId());
 
-            if (is_null($key)) {
+            if ($key === null) {
                 throw new HttpException('Two-factor authentication is not enabled');
             }
 
@@ -165,7 +165,7 @@ $app->group('/two_factor_auth', function (\Slim\App $app) {
             $mfaKeys = new MfaKeys();
             $key = $mfaKeys->getEnabledMfaKey(\Phasem\App::getUser()->getId());
 
-            if (is_null($key)) {
+            if ($key === null) {
                 throw new HttpException('Two-factor authentication is not enabled');
             }
 

@@ -49,6 +49,7 @@ class MfaKeys
         $this->db->updateRows('mfa_keys', $set, [
             'user_id' => $key->getUserId(),
             'mfa_enabled' => ['nn' => ''],
+            'mfa_disabled' => ['nu' => ''],
         ]);
 
         // enable the specified key
