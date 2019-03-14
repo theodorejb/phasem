@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Phasem\model;
 
+use DateTime;
+
 class User implements \JsonSerializable
 {
     private $id;
@@ -21,8 +23,8 @@ class User implements \JsonSerializable
         $this->fullName = $data['user_fullname'];
         $this->email = $data['user_email'];
         $this->password = $data['user_password'];
-        $this->dateCreated = new \DateTime($data['user_created']);
-        $this->dateUpdated = new \DateTime($data['user_last_updated']);
+        $this->dateCreated = new DateTime($data['user_created']);
+        $this->dateUpdated = new DateTime($data['user_last_updated']);
         $this->authId = $data['auth_id'] ?? null;
     }
 
@@ -55,7 +57,7 @@ class User implements \JsonSerializable
             'id' => $this->id,
             'fullName' => $this->fullName,
             'email' => $this->email,
-            'dateCreated' => $this->dateCreated->format('c'),
+            'dateCreated' => $this->dateCreated->format(DateTime::ATOM),
         ];
     }
 }

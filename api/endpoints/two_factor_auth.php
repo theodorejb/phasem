@@ -18,7 +18,7 @@ $app->group('/two_factor_auth', function (\Slim\App $app) {
 
         if ($key !== null) {
             $data['isMfaEnabled'] = true;
-            $data['backupsLastViewed'] = $key->getBackupsLastViewed()->format('c');
+            $data['backupsLastViewed'] = $key->getBackupsLastViewed()->format(DateTime::ATOM);
             $data['unusedBackupCount'] = MfaKey::BACKUP_SET_SIZE - count($mfaKeys->getUsedBackupCounters($key));
         }
 
