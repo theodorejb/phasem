@@ -71,9 +71,9 @@ CREATE TABLE IF NOT EXISTS mfa_keys (
 );
 
 CREATE TABLE IF NOT EXISTS mfa_used_backup_codes (
-    key_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    key_id INT UNSIGNED NOT NULL,
     counter INT UNSIGNED NOT NULL,
     date_used DATETIME NOT NULL,
     FOREIGN KEY (key_id) REFERENCES mfa_keys(key_id) ON DELETE CASCADE,
-    CONSTRAINT unique_used_codes UNIQUE (key_id, counter)
+    PRIMARY KEY unique_used_codes (key_id, counter)
 );
