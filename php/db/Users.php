@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Phasem\db;
 
-use Phasem\model\User;
+use Phasem\model\{CurrentUser, User};
 use Teapot\{HttpException, StatusCode};
 
 class Users
@@ -46,7 +46,7 @@ class Users
         return $result->getId();
     }
 
-    public function updateUserProfile(User $user, array $data): void
+    public function updateUserProfile(CurrentUser $user, array $data): void
     {
         if (!isset($data['fullName'])) {
             throw new HttpException('Missing required fullName property');
@@ -62,7 +62,7 @@ class Users
         $this->db->updateRows('users', $set, ['user_id' => $user->getId()]);
     }
 
-    public function updateUserEmail(User $user, array $data): void
+    public function updateUserEmail(CurrentUser $user, array $data): void
     {
         if (!isset($data['email'])) {
             throw new HttpException('Missing required email property');
@@ -84,7 +84,7 @@ class Users
         $this->db->updateRows('users', $set, ['user_id' => $user->getId()]);
     }
 
-    public function updateUserPassword(User $user, array $data): void
+    public function updateUserPassword(CurrentUser $user, array $data): void
     {
         if (!isset($data['currentPassword'], $data['newPassword'])) {
             throw new HttpException('currentPassword and newPassword properties are required');

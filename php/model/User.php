@@ -14,8 +14,6 @@ class User implements \JsonSerializable
     private $password;
     private $dateCreated;
     private $dateUpdated;
-    /** @var int */
-    private $authId;
 
     public function __construct(array $data)
     {
@@ -25,7 +23,6 @@ class User implements \JsonSerializable
         $this->password = $data['user_password'];
         $this->dateCreated = new DateTime($data['user_created']);
         $this->dateUpdated = new DateTime($data['user_last_updated']);
-        $this->authId = $data['auth_id'] ?? null;
     }
 
     public function getId(): int
@@ -36,14 +33,6 @@ class User implements \JsonSerializable
     public function getEmail(): string
     {
         return $this->email;
-    }
-
-    /**
-     * Returns the ID of the user's authentication token
-     */
-    public function getAuthId(): int
-    {
-        return $this->authId;
     }
 
     public function verifyPassword(string $password): bool

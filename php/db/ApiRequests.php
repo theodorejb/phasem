@@ -6,7 +6,7 @@ namespace Phasem\db;
 
 use DateTimeImmutable;
 use Phasem\App;
-use Phasem\model\User;
+use Phasem\model\CurrentUser;
 use Slim\Http\Request;
 
 class ApiRequests
@@ -18,7 +18,7 @@ class ApiRequests
         $this->db = DbConnector::getDatabase();
     }
 
-    public function recordRequest(User $user, Request $request, string $error = null): void
+    public function recordRequest(CurrentUser $user, Request $request, string $error = null): void
     {
         $now = new DateTimeImmutable();
         $uri = $request->getUri();

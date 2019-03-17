@@ -142,7 +142,7 @@ $app->group('/two_factor_auth', function (\Slim\App $app) {
 
         $mfaKeys->disableMfaKey($key);
         return $response->withStatus(204);
-    });
+    })->add('recent_mfa_completion');
 
     $app->group('/backup_codes', function () use ($app) {
         // get current backup codes
@@ -173,5 +173,5 @@ $app->group('/two_factor_auth', function (\Slim\App $app) {
             $unusedCodes = $key->getUnusedBackupCodes([]);
             return $response->withJson(['data' => $unusedCodes]);
         });
-    });
+    })->add('recent_mfa_completion');
 });

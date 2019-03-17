@@ -6,12 +6,15 @@ namespace Phasem\db;
 
 use DateTime;
 use Phasem\App;
+use Phasem\model\CurrentUser;
 use Phasem\model\User;
 use Slim\Http\Request;
 use Teapot\{HttpException, StatusCode};
 
 class AuthTokens
 {
+    const TWO_FACTOR_REQUIRED_ERROR = 'Two-factor authentication code required';
+
     private $db;
 
     public function __construct()
@@ -49,7 +52,7 @@ class AuthTokens
         $this->db->updateRows('auth_tokens', $set, ['auth_id' => $authId]);
     }
 
-    public function deactivateOtherTokens(User $user): void
+    public function deactivateOtherTokens(CurrentUser $user): void
     {
         $set = ['auth_token_deactivated' => (new DateTime())->format(DbConnector::SQL_DATE)];
 
@@ -114,19 +117,22 @@ class AuthTokens
             $this->db->updateRows('auth_tokens', $set, ['auth_id' => $tokenRow['auth_id']]);
         }
 
+        $mfaLastCompleted = $tokenRow['mfa_last_completed'] ? new DateTime($tokenRow['mfa_last_completed']) : null;
+
         if ($tokenRow['mfa_enabled'] !== null && $request->getUri()->getPath() !== 'two_factor_auth/verify') {
             $mfaEnabled = new DateTime($tokenRow['mfa_enabled']);
 
             // require MFA to be completed if it never was completed, or was completed before MFA was reconfigured
-            if (!$tokenRow['mfa_last_completed'] || new DateTime($tokenRow['mfa_last_completed']) < $mfaEnabled) {
+            if (!$mfaLastCompleted || $mfaLastCompleted < $mfaEnabled) {
                 // clients should check for this 404 status message and prompt user to enter 2FA code
-                throw new HttpException('Two-factor authentication code required', StatusCode::UNAUTHORIZED);
+                throw new HttpException(self::TWO_FACTOR_REQUIRED_ERROR, StatusCode::UNAUTHORIZED);
             }
         }
 
         $userRow = $this->db->query("SELECT * FROM users WHERE user_id = ?", [$tokenRow['user_id']])->getFirst();
         $userRow['auth_id'] = $tokenRow['auth_id'];
-        App::setUser(new User($userRow));
+        $userRow['mfa_last_completed'] = $mfaLastCompleted;
+        App::setUser(new CurrentUser($userRow));
     }
 
     /**

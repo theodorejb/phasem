@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Phasem;
 
 use Defuse\Crypto\{Crypto, Key};
-use Phasem\model\User;
+use Phasem\model\CurrentUser;
 
 class App
 {
@@ -45,12 +45,12 @@ class App
         }
     }
 
-    public static function setUser(?User $user): void
+    public static function setUser(?CurrentUser $user): void
     {
         self::$user = $user;
     }
 
-    public static function getUser(): ?User
+    public static function getUser(): ?CurrentUser
     {
         return self::$user;
     }
