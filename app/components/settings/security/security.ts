@@ -7,6 +7,7 @@ import {MfaService} from "../../../services/MfaService";
 })
 export class SecurityComponent implements OnInit {
     public error: string;
+    public isLoading = true;
     public status: MfaStatus;
 
     constructor(
@@ -14,9 +15,11 @@ export class SecurityComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.mfaService.getStatus().subscribe(
-            status => {this.status = status;},
-            error => {this.error = error;},
-        );
+        this.mfaService.getStatus()
+            .subscribe(
+                status => {this.status = status;},
+                error => {this.error = error;},
+            )
+            .add(() => {this.isLoading = false;});
     }
 }

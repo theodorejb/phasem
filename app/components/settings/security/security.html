@@ -6,17 +6,19 @@
 
 <p class="error">{{error}}</p>
 
-<table *ngIf="status" class="cleanTable">
-    <tbody>
-    <tr>
-        <th>Authenticator app</th>
-        <td class="statusText">{{status.isMfaEnabled ? 'Enabled' : 'Not configured'}}</td>
-        <td><a class="button" routerLink="two-factor-auth">{{status.isMfaEnabled ? 'Edit' : 'Add'}}</a></td>
-    </tr>
-    <tr *ngIf="status.backupsLastViewed">
-        <th>Recovery codes</th>
-        <td class="statusText">{{status.unusedBackupCount}} remaining. Last viewed on {{status.backupsLastViewed | date:'medium'}}</td>
-        <td><a class="button" routerLink="two-factor-recovery">Show</a></td>
-    </tr>
-    </tbody>
-</table>
+<load-contents [loading]="isLoading">
+    <table *ngIf="status" class="cleanTable">
+        <tbody>
+        <tr>
+            <th>Authenticator app</th>
+            <td class="statusText">{{status.isMfaEnabled ? 'Enabled' : 'Not configured'}}</td>
+            <td><a class="button" routerLink="two-factor-auth">{{status.isMfaEnabled ? 'Edit' : 'Add'}}</a></td>
+        </tr>
+        <tr *ngIf="status.backupsLastViewed">
+            <th>Recovery codes</th>
+            <td class="statusText">{{status.unusedBackupCount}} remaining. Last viewed on {{status.backupsLastViewed | date:'medium'}}</td>
+            <td><a class="button" routerLink="two-factor-recovery">Show</a></td>
+        </tr>
+        </tbody>
+    </table>
+</load-contents>

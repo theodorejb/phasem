@@ -6,6 +6,7 @@ import {MfaService} from "../../../../../services/MfaService";
 })
 export class RecoveryCodesComponent implements OnInit {
     public error: string;
+    public isLoading = true;
     public backupCodes: string[] = [];
 
     constructor(
@@ -13,11 +14,13 @@ export class RecoveryCodesComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.mfaService.setupMfaRecovery().subscribe(
-            recovery => {
-                this.backupCodes = recovery.backupCodes;
-            },
-            error => {this.error = error;},
-        );
+        this.mfaService.setupMfaRecovery()
+            .subscribe(
+                recovery => {
+                    this.backupCodes = recovery.backupCodes;
+                },
+                error => {this.error = error;},
+            )
+            .add(() => {this.isLoading = false;});
     }
 }

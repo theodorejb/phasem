@@ -10,6 +10,7 @@ import {MfaService} from "../../../../../services/MfaService";
 })
 export class VerifyComponent implements OnInit {
     public error: string;
+    public isLoading = true;
     public secret: MfaSecret;
     public enablingMfa = false;
     public showSecret = false;
@@ -24,19 +25,21 @@ export class VerifyComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.mfaService.setupMfaSecret().subscribe(
-            secret => {
-                this.secret = secret;
-                this.qrCode = this.sanitizer.bypassSecurityTrustHtml(secret.qrCode);
-            },
-            error => {
-                if (error === 'No two-factor setup found. Please attempt setup again.') {
-                    this.router.navigate(['/settings/security/two-factor-auth'], {queryParams: {no2FA: 1}});
-                }
+        this.mfaService.setupMfaSecret()
+            .subscribe(
+                secret => {
+                    this.secret = secret;
+                    this.qrCode = this.sanitizer.bypassSecurityTrustHtml(secret.qrCode);
+                },
+                error => {
+                    if (error === 'No two-factor setup found. Please attempt setup again.') {
+                        this.router.navigate(['/settings/security/two-factor-auth'], {queryParams: {no2FA: 1}});
+                    }
 
-                this.error = error;
-            },
-        );
+                    this.error = error;
+                },
+            )
+            .add(() => {this.isLoading = false;});
     }
 
     toggleSecret() {

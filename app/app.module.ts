@@ -5,6 +5,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {RouterModule} from '@angular/router';
 import {LaddaModule} from 'angular2-ladda';
 import {AppComponent} from './components/app/app';
+import {LoadContentsComponent} from "./components/load-contents/load-contents";
 import {AutofocusDirective} from "./directives/autofocus";
 import {appComponents, appRoutes} from './routing';
 
@@ -22,6 +23,7 @@ import {appComponents, appRoutes} from './routing';
         AppComponent,
         ...appComponents,
         AutofocusDirective,
+        LoadContentsComponent,
     ],
     bootstrap: [AppComponent],
 })

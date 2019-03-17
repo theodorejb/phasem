@@ -2,30 +2,32 @@
 
 <p class="error">{{error}}</p>
 
-<div *ngIf="status">
-    <p *ngIf="specialError" class="warning">{{specialError}}</p>
+<load-contents [loading]="isLoading">
+    <div *ngIf="status">
+        <p *ngIf="specialError" class="warning">{{specialError}}</p>
 
-    <p *ngIf="status.isMfaEnabled" class="warning">
-        You're about to change your two-factor authentication device.
-        This will invalidate your current two-factor devices and recovery codes.
-    </p>
+        <p *ngIf="status.isMfaEnabled" class="warning">
+            You're about to change your two-factor authentication device.
+            This will invalidate your current two-factor devices and recovery codes.
+        </p>
 
-    <p>
-        When you sign in, you'll enter your username and password like always.
-        Then you'll have to enter a code from your phone or tablet to finish logging in.
-    </p>
+        <p>
+            When you sign in, you'll enter your username and password like always.
+            Then you'll have to enter a code from your phone or tablet to finish logging in.
+        </p>
 
-    <a class="proceed button" routerLink="recovery-codes">Set up with an app</a>
+        <a class="proceed button" routerLink="recovery-codes">Set up with an app</a>
 
-    <p class="smallText">
-        You can use any phone/tablet app that is compatible with standard time-based
-        one-time passwords. Examples include Authy, 1Password, LastPass Authenticator,
-        and Google Authenticator.
-    </p>
+        <p class="smallText">
+            You can use any phone/tablet app that is compatible with standard time-based
+            one-time passwords. Examples include Authy, 1Password, LastPass Authenticator,
+            and Google Authenticator.
+        </p>
 
-    <p>
-        <button class="caution" *ngIf="status.isMfaEnabled" (click)="disableMfa()" [ladda]="disablingMfa">
-            Disable two-factor authentication
-        </button>
-    </p>
-</div>
+        <p>
+            <button class="caution" *ngIf="status.isMfaEnabled" (click)="disableMfa()" [ladda]="disablingMfa">
+                Disable two-factor authentication
+            </button>
+        </p>
+    </div>
+</load-contents>

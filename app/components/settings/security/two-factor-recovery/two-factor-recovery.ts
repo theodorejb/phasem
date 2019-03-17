@@ -6,6 +6,7 @@ import {MfaService} from "../../../../services/MfaService";
 })
 export class TwoFactorRecoveryComponent implements OnInit {
     public error: string;
+    public isLoading = true;
     public isGenerating: boolean = false;
     public backupCodes: string[] = [];
 
@@ -14,12 +15,14 @@ export class TwoFactorRecoveryComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.mfaService.getBackupCodes().subscribe(
-            backupCodes => {
-                this.backupCodes = backupCodes;
-            },
-            error => {this.error = error;},
-        );
+        this.mfaService.getBackupCodes()
+            .subscribe(
+                backupCodes => {
+                    this.backupCodes = backupCodes;
+                },
+                error => {this.error = error;},
+            )
+            .add(() => {this.isLoading = false;});
     }
 
     generateNewCodes() {

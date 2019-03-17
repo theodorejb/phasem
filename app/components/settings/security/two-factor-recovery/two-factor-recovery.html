@@ -1,7 +1,5 @@
 <h3>Two-factor recovery codes</h3>
 
-<p class="error">{{error}}</p>
-
 <p>Recovery codes are necessary to access your account in the event you
     cannot receive two-factor authentication codes (e.g. when you get a new phone).
 </p>
@@ -11,27 +9,31 @@
     We recommend saving them with a password manager such as Lastpass, 1Password, or Keeper.
 </p>
 
-<p *ngIf="backupCodes.length === 0; else notAllUsed" class="warning">
-    <strong>All codes have been used.</strong>
-    Generate a new set to avoid losing access to your account.
-</p>
+<p class="error">{{error}}</p>
 
-<ng-template #notAllUsed>
-    <p class="warning">
-        <strong>Put these in a safe spot.</strong>
-        If you lose your device and don't have the recovery codes you will lose access to your account.
+<load-contents [loading]="isLoading">
+    <p *ngIf="backupCodes.length === 0; else notAllUsed" class="warning">
+        <strong>All codes have been used.</strong>
+        Generate a new set to avoid losing access to your account.
     </p>
 
-    <ul>
-        <li *ngFor="let code of backupCodes">{{code}}</li>
-    </ul>
+    <ng-template #notAllUsed>
+        <p class="warning">
+            <strong>Put these in a safe spot.</strong>
+            If you lose your device and don't have the recovery codes you will lose access to your account.
+        </p>
+
+        <ul>
+            <li *ngFor="let code of backupCodes">{{code}}</li>
+        </ul>
+
+        <p>
+            When you generate new recovery codes, you must download or print the new codes.
+            Your old codes won't work anymore.
+        </p>
+    </ng-template>
 
     <p>
-        When you generate new recovery codes, you must download or print the new codes.
-        Your old codes won't work anymore.
+        <button [ladda]="isGenerating" (click)="generateNewCodes()">Generate new recovery codes</button>
     </p>
-</ng-template>
-
-<p>
-    <button [ladda]="isGenerating" (click)="generateNewCodes()">Generate new recovery codes</button>
-</p>
+</load-contents>

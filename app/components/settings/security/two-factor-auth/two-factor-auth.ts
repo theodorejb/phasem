@@ -8,6 +8,7 @@ import {MfaService} from "../../../../services/MfaService";
 })
 export class TwoFactorAuthComponent implements OnInit {
     public error: string;
+    public isLoading = true;
     public specialError: string;
     public status: MfaStatus;
     public disablingMfa = false;
@@ -27,10 +28,12 @@ export class TwoFactorAuthComponent implements OnInit {
             }
         });
 
-        this.mfaService.getStatus().subscribe(
-            status => {this.status = status;},
-            error => {this.error = error;},
-        );
+        this.mfaService.getStatus()
+            .subscribe(
+                status => {this.status = status;},
+                error => {this.error = error;},
+            )
+            .add(() => {this.isLoading = false;});
     }
 
     disableMfa() {
