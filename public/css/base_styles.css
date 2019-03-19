@@ -147,8 +147,11 @@ p {
     margin: 1.5em 0;
 }
 
-.link {
-    color: #0000ee;
+.link, .link:hover {
+    border: none;
+    background: none;
+    padding: 0;
+    color: #00e;
     cursor: pointer;
 }
 

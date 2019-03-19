@@ -126,7 +126,7 @@ class MfaKeys
 
         if ($key === null) {
             $key = $this->createMfaKey($userId);
-        } elseif ($key->getDateRequested() < new DateTimeImmutable('1 hour ago')) {
+        } elseif ($key->getDateRequested() < new DateTimeImmutable('20 minutes ago')) {
             $this->removeNeverEnabledKeys($userId);
             $key = $this->createMfaKey($userId);
         }
@@ -146,10 +146,10 @@ class MfaKeys
 
         // requested keys should be valid for a period of time, but not indefinitely (to allow reloading state)
 
-        if ($key->getDateRequested() < new DateTimeImmutable('1 hour ago')) {
+        if ($key->getDateRequested() < new DateTimeImmutable('20 minutes ago')) {
             $this->removeNeverEnabledKeys($key->getUserId());
             throw new HttpException($error);
-        } elseif ($renew && $key->getDateRequested() < new DateTimeImmutable('30 minutes ago')) {
+        } elseif ($renew && $key->getDateRequested() < new DateTimeImmutable('10 minutes ago')) {
             $set = ['mfa_requested' => date(DbConnector::SQL_DATE)];
             $this->db->updateRows('mfa_keys', $set, ['key_id' => $key->getId()]);
         }

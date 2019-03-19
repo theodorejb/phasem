@@ -42,10 +42,11 @@ $app->group('/two_factor_auth', function (\Slim\App $app) {
         $mfaKeys = new MfaKeys();
         $key = $mfaKeys->getRequestedMfaKey($user->getId());
         $mfaKeys->validateRequestedKey($key, true);
+        $secret = strtoupper($key->getSharedSecret());
 
         return $response->withJson([
             'data' => [
-                'secret' => $key->getSharedSecret(),
+                'secret' => implode(' ', str_split($secret, 4)),
                 'qrCode' => $key->makeQrCode($user->getEmail()),
             ],
         ]);

@@ -4,7 +4,7 @@
 
 <load-contents [loading]="isLoading">
     <p>
-        If you can't use a barcode, <span class="link" (click)="toggleSecret()">enter this text code</span>
+        If you can't use a barcode, <button class="link" (click)="toggleSecret()">enter this text code</button>
         instead<span *ngIf="!showSecret">.</span><span *ngIf="showSecret">: {{secret.secret}}</span>
     </p>
 
@@ -18,7 +18,7 @@
         </div>
 
         <p>
-            <button class="proceed" [ladda]="enablingMfa">Enable</button>
+            <button class="proceed" [ladda]="enablingMfa">Enable two-factor authentication</button>
             <a class="button" routerLink="../../">Cancel</a>
         </p>
     </form>

@@ -24,8 +24,8 @@
             and Google Authenticator.
         </p>
 
-        <p>
-            <button class="caution" *ngIf="status.isMfaEnabled" (click)="disableMfa()" [ladda]="disablingMfa">
+        <p *ngIf="status.isMfaEnabled">
+            <button class="caution" (click)="disableMfa()" [ladda]="disablingMfa">
                 Disable two-factor authentication
             </button>
         </p>
