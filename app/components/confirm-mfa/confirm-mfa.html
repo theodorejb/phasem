@@ -2,13 +2,13 @@
 
 <p class="error">{{error}}</p>
 
-<p>Open the two-factor authentication app on your device to view your authentication code and verify your identity.</p>
+<p>Enter the verification code from the authenticator app on your device to verify your identity.</p>
 
 <form ngNativeValidate (submit)="verifyMfa()">
     <div class="formSection">
         <label for="code-input">Authentication code</label>
         <!-- Number input can't be used since it trims leading zeros -->
-        <input id="code-input" type="text" name="code" [(ngModel)]="code" required appAutofocus/>
+        <input id="code-input" type="text" name="code" [(ngModel)]="code" required appAutofocus autocomplete="off"/>
     </div>
     <div class="formSection">
         <button [ladda]="submitting">Verify</button>

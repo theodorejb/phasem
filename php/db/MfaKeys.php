@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Phasem\db;
 
-use DateTimeImmutable;
+use DateInterval, DateTimeImmutable, Exception;
 use Phasem\App;
 use Phasem\model\MfaKey;
 use Teapot\HttpException;
@@ -152,6 +152,54 @@ class MfaKeys
         } elseif ($renew && $key->getDateRequested() < new DateTimeImmutable('10 minutes ago')) {
             $set = ['mfa_requested' => date(DbConnector::SQL_DATE)];
             $this->db->updateRows('mfa_keys', $set, ['key_id' => $key->getId()]);
+        }
+    }
+
+    /**
+     * @throws HttpException if the code is invalid
+     */
+    public function validateCode(MfaKey $key, string $code): void
+    {
+        $code = str_replace(' ', '', $code); // remove any spaces from code
+        $codeLength = strlen($code);
+
+        if ($codeLength !== 6 && $codeLength !== 8) {
+            // invalid code length
+            throw new HttpException('Invalid verification code');
+        }
+
+        // if 5 or more previous attempts failed, require user to wait before trying again
+        // todo: change to count separate set of attempts for users with device ID who have already confirmed 2FA for this secret
+        $failedAttempts = $key->getFailedAttempts();
+
+        if ($failedAttempts >= 5) {
+            $timeToWait = DateInterval::createFromDateString(pow($failedAttempts - 4, 2) . ' seconds');
+
+            if (new DateTimeImmutable() < $key->getLastFailedAttempt()->add($timeToWait)) {
+                throw new HttpException('Too many failed attempts. Please wait before trying again.', 429);
+            }
+        }
+
+        try {
+            if ($codeLength === 6) {
+                $key->validateTimeBasedCode($code);
+            } else {
+                // backup code
+                $counter = $key->validateBackupCode($code);
+
+                if ($this->isBackupCodeUsed($key->getId(), $counter)) {
+                    throw new HttpException('Invalid verification code');
+                }
+
+                $this->useBackupCode($key->getId(), $counter);
+            }
+        } catch (Exception $e) {
+            $this->incrementFailedAttempts($key);
+            throw $e;
+        }
+
+        if ($failedAttempts > 0) {
+            $this->resetFailedAttempts($key);
         }
     }
 

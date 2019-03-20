@@ -14,11 +14,11 @@
 
         <div class="formSection">
             <label for="code-input">Enter the six-digit code from the application</label>
-            <input id="code-input" type="text" name="code" [(ngModel)]="code" placeholder="123456" required appAutofocus/>
+            <input id="code-input" type="text" name="code" [(ngModel)]="code" placeholder="123456" required appAutofocus autocomplete="off"/>
         </div>
 
         <p>
-            <button class="proceed" [ladda]="enablingMfa">Enable two-factor authentication</button>
+            <button class="proceed" [ladda]="enablingMfa" data-spinner-color="#fff">Enable two-factor authentication</button>
             <a class="button" routerLink="../../">Cancel</a>
         </p>
     </form>

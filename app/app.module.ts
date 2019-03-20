@@ -16,6 +16,7 @@ import {appComponents, appRoutes} from './routing';
         HttpClientModule,
         LaddaModule.forRoot({
             style: 'expand-right',
+            spinnerColor: '#000',
         }),
         RouterModule.forRoot(appRoutes),
     ],
