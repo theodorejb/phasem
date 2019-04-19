@@ -1,6 +1,6 @@
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
+var HtmlWebpackTagsPlugin = require('html-webpack-tags-plugin');
 var TerserPlugin = require('terser-webpack-plugin');
 var path = require('path');
 
@@ -33,8 +33,8 @@ var config = {
             template: 'public/index_template.html',
             hash: true,
         }),
-        new HtmlWebpackIncludeAssetsPlugin({
-            assets: [
+        new HtmlWebpackTagsPlugin({
+            tags: [
                 'dist/js/ladda/ladda-themeless.min.css',
                 'css/base_styles.css',
                 'dist/js/core-js/shim.min.js',
@@ -47,7 +47,7 @@ var config = {
 };
 
 module.exports = (env, argv) => {
-	// only enable Angular Build Optimizer in production mode to keep development builds fast
+    // only enable Angular Build Optimizer in production mode to keep development builds fast
     if (argv.mode === 'production') {
         config.module = {
             rules: [
