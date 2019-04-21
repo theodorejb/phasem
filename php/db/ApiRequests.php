@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Phasem\db;
 
 use DateTimeImmutable;
+use PeachySQL\SqlException;
 use Phasem\App;
 use Phasem\model\CurrentUser;
 use Slim\Http\Request;
@@ -46,11 +47,10 @@ class ApiRequests
 
     public function getEndpointId(string $host, string $path): int
     {
-        $existing = $this->db->selectFrom('SELECT endpoint_id FROM api_endpoints')
-            ->where(['host' => $host, 'path' => $path])->query()->getFirst();
+        $endpointId = $this->getExistingEndpointId($host, $path);
 
-        if ($existing !== null) {
-            return $existing['endpoint_id'];
+        if ($endpointId !== null) {
+            return $endpointId;
         }
 
         $row = [
@@ -58,6 +58,27 @@ class ApiRequests
             'path' => $path,
         ];
 
-        return $this->db->insertRow('api_endpoints', $row)->getId();
+        // A race condition can occur here when there are multiple simultaneous requests to the same endpoint,
+        // and both requests will try to insert into the api_endpoints table, causing a duplicate entry error.
+
+        try {
+            return $this->db->insertRow('api_endpoints', $row)->getId();
+        } catch (SqlException $e) {
+            $duplicateMsg = 'Failed to execute prepared statement: Duplicate entry';
+
+            if (substr($e->getMessage(), 0, strlen($duplicateMsg)) === $duplicateMsg) {
+                return $this->getExistingEndpointId($host, $path);
+            }
+
+            throw $e;
+        }
+    }
+
+    private function getExistingEndpointId(string $host, string $path): ?int
+    {
+        $existing = $this->db->selectFrom('SELECT endpoint_id FROM api_endpoints')
+            ->where(['host' => $host, 'path' => $path])->query()->getFirst();
+
+        return $existing['endpoint_id'] ?? null;
     }
 }
