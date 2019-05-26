@@ -200,11 +200,15 @@ export class ApiService {
 }
 
 function getBuildHash(doc: Document): string {
+    // concatenate all the file names/hashes and prompt to reload if any of them change
     let scripts = doc.getElementsByTagName('script');
+    let hash = '';
 
     for (let i = 0; i < scripts.length; i++) {
         if (scripts.item(i).src) {
-            return scripts.item(i).src.split('?')[1];
+            hash += scripts.item(i).src.split('/').pop() + ',';
         }
     }
+
+    return hash;
 }

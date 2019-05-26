@@ -1,9 +1,11 @@
 import {enableProdMode} from '@angular/core';
-import {platformBrowser} from '@angular/platform-browser';
-import {AppModuleNgFactory} from './app.module.ngfactory';
+import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+import {AppModule} from './app.module';
+import {environment} from './environments/environment';
 
-if (document.location.host !== 'localhost') {
+if (environment.production) {
     enableProdMode();
 }
 
-platformBrowser().bootstrapModuleFactory(AppModuleNgFactory);
+platformBrowserDynamic().bootstrapModule(AppModule)
+    .catch(err => console.error(err));
