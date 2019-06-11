@@ -17,12 +17,12 @@ class User implements \JsonSerializable
 
     public function __construct(array $data)
     {
-        $this->id = $data['user_id'];
-        $this->fullName = $data['user_fullname'];
-        $this->email = $data['user_email'];
-        $this->password = $data['user_password'];
-        $this->dateCreated = new DateTime($data['user_created']);
-        $this->dateUpdated = new DateTime($data['user_last_updated']);
+        $this->id = $data['account_id'];
+        $this->fullName = $data['fullname'];
+        $this->email = $data['email'];
+        $this->password = $data['password'];
+        $this->dateCreated = new DateTime($data['account_created']);
+        $this->dateUpdated = new DateTime($data['account_last_updated']);
     }
 
     public function getId(): int

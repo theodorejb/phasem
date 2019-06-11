@@ -34,7 +34,7 @@ class AuthTokens
         }
 
         $this->db->insertRow('auth_tokens', [
-            'user_id' => $user->getId(),
+            'account_id' => $user->getId(),
             'selector' => $parts['selector'],
             'verifier' => $parts['verifierHash'],
             'auth_token_created' => $now,
@@ -57,7 +57,7 @@ class AuthTokens
         $set = ['auth_token_deactivated' => (new DateTime())->format(DbConnector::SQL_DATE)];
 
         $this->db->updateRows('auth_tokens', $set, [
-            'user_id' => $user->getId(),
+            'account_id' => $user->getId(),
             'auth_token_deactivated' => ['nu' => ''],
             'auth_id' => ['ne' => $user->getAuthId()],
         ]);
@@ -77,10 +77,10 @@ class AuthTokens
             throw new HttpException('Authorization header must use Bearer authentication scheme', StatusCode::UNAUTHORIZED);
         }
 
-        $sql = "SELECT t.user_id, t.auth_id, t.verifier, t.auth_token_last_renewed, t.mfa_last_completed, ua.user_agent, (
+        $sql = "SELECT t.account_id, t.auth_id, t.verifier, t.auth_token_last_renewed, t.mfa_last_completed, ua.user_agent, (
                     SELECT k.mfa_enabled
                     FROM mfa_keys k
-                    WHERE k.user_id = t.user_id
+                    WHERE k.account_id = t.account_id
                     AND k.mfa_enabled IS NOT NULL
                     AND k.mfa_disabled IS NULL
                 ) AS mfa_enabled
@@ -129,7 +129,7 @@ class AuthTokens
             }
         }
 
-        $userRow = $this->db->query("SELECT * FROM users WHERE user_id = ?", [$tokenRow['user_id']])->getFirst();
+        $userRow = $this->db->query("SELECT * FROM accounts WHERE account_id = ?", [$tokenRow['account_id']])->getFirst();
         $userRow['auth_id'] = $tokenRow['auth_id'];
         $userRow['mfa_last_completed'] = $mfaLastCompleted;
         App::setUser(new CurrentUser($userRow));

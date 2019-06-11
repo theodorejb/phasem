@@ -46,7 +46,7 @@ $container['errorHandler'] = function () {
         if ($user !== null) {
             (new ApiRequests())->recordRequest($user, $request, $message);
         } else {
-            $body = App::hashSensitiveKeys($request->getParsedBody());
+            $body = $request->getParsedBody();
 
             if ($request->getMethod() === 'POST' && $request->getUri()->getPath() === '/api/token') {
                 $serverParams = $request->getServerParams();
@@ -60,7 +60,10 @@ $container['errorHandler'] = function () {
             // log to standard error log
             $message .= ' | endpoint: ' . $request->getUri()->__toString();
             $message .= ' | method: ' . $request->getMethod();
-            $message .= ' | body: ' . json_encode($body);
+
+            if ($body !== null) {
+                $message .= ' | body: ' . json_encode(App::hashSensitiveKeys($body));
+            }
 
             error_log($message);
         }

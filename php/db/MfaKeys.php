@@ -23,7 +23,7 @@ class MfaKeys
         $now = date(DbConnector::SQL_DATE);
 
         $row = [
-            'user_id' => $userId,
+            'account_id' => $userId,
             'secret' => App::encrypt(random_bytes(10)),
             'mfa_requested' => $now,
             'mfa_enabled' => null,
@@ -47,7 +47,7 @@ class MfaKeys
         $set = ['mfa_disabled' => date(DbConnector::SQL_DATE)];
 
         $this->db->updateRows('mfa_keys', $set, [
-            'user_id' => $key->getUserId(),
+            'account_id' => $key->getUserId(),
             'mfa_enabled' => ['nn' => ''],
             'mfa_disabled' => ['nu' => ''],
         ]);
@@ -63,7 +63,7 @@ class MfaKeys
     public function removeNeverEnabledKeys(int $userId): void
     {
         $this->db->deleteFrom('mfa_keys', [
-            'user_id' => $userId,
+            'account_id' => $userId,
             'mfa_enabled' => ['nu' => ''],
             'mfa_disabled' => ['nu' => ''],
         ]);
@@ -97,7 +97,7 @@ class MfaKeys
     public function getEnabledMfaKey(int $userId): ?MfaKey
     {
         $sql = "SELECT * FROM mfa_keys
-                WHERE user_id = ?
+                WHERE account_id = ?
                 AND mfa_enabled IS NOT NULL
                 AND mfa_disabled IS NULL";
 
@@ -111,7 +111,7 @@ class MfaKeys
     public function getRequestedMfaKey(int $userId): ?MfaKey
     {
         $sql = "SELECT * FROM mfa_keys
-                WHERE user_id = ?
+                WHERE account_id = ?
                 AND mfa_enabled IS NULL
                 AND mfa_disabled IS NULL";
 

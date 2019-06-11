@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use Phasem\db\{AuthTokens, MfaKeys, Users};
+use Phasem\db\{Accounts, AuthTokens, MfaKeys};
 use Slim\Http\{Request, Response};
 use Teapot\{HttpException, StatusCode};
 
 // create a user
 $app->post('/user', function (Request $request, Response $response) {
     return $response->withJson([
-        'id' => (new Users())->insertUserFromApi($request->getParsedBody()),
+        'id' => (new Accounts())->insertUserFromApi($request->getParsedBody()),
     ]);
 });
 
@@ -22,7 +22,7 @@ $app->post('/token', function (Request $request, Response $response) {
     }
 
     // todo: log failed login attempts in database with IP address
-    $user = (new Users())->getUserByEmail($data['email']);
+    $user = (new Accounts())->getUserByEmail($data['email']);
 
     if ($user === null || !$user->verifyPassword($data['password'])) {
         throw new HttpException('Invalid login request', StatusCode::UNAUTHORIZED);

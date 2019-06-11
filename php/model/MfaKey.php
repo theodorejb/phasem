@@ -34,7 +34,7 @@ class MfaKey
     public function __construct(array $row)
     {
         $this->id = $row['key_id'];
-        $this->userId = $row['user_id'];
+        $this->userId = $row['account_id'];
         $this->secret = $row['secret'];
         $this->dateRequested = new DateTimeImmutable($row['mfa_requested']);
         $this->dateEnabled = $row['mfa_enabled'] ? new DateTimeImmutable($row['mfa_enabled']) : null;

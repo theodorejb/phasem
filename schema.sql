@@ -4,13 +4,13 @@ CREATE DATABASE phasem
 
 USE phasem;
 
-CREATE TABLE IF NOT EXISTS users (
-    user_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    user_fullname VARCHAR(70) NOT NULL,
-    user_email VARCHAR(255) NOT NULL UNIQUE,
-    user_password VARCHAR(255) NOT NULL,
-    user_created DATETIME NOT NULL,
-    user_last_updated DATETIME NOT NULL
+CREATE TABLE IF NOT EXISTS accounts (
+    account_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    fullname VARCHAR(70) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    account_created DATETIME NOT NULL,
+    account_last_updated DATETIME NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS user_agents (
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS user_agents (
 
 CREATE TABLE IF NOT EXISTS auth_tokens (
     auth_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    user_id INT UNSIGNED NOT NULL,
+    account_id INT UNSIGNED NOT NULL,
     selector CHAR(32) NOT NULL UNIQUE,
     verifier BINARY(32) NOT NULL,
     auth_token_created DATETIME NOT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS auth_tokens (
     auth_token_deactivated DATETIME NULL,
     mfa_last_completed DATETIME NULL,
     user_agent_id INT UNSIGNED NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (account_id) REFERENCES accounts(account_id) ON DELETE CASCADE,
     FOREIGN KEY (user_agent_id) REFERENCES user_agents(user_agent_id)
 );
 
@@ -57,7 +57,7 @@ CREATE TABLE api_requests (
 
 CREATE TABLE IF NOT EXISTS mfa_keys (
     key_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    user_id INT UNSIGNED NOT NULL,
+    account_id INT UNSIGNED NOT NULL,
     secret VARCHAR(255) NOT NULL, -- BINARY(94) takes half the space
     mfa_requested DATETIME NOT NULL,
     mfa_enabled DATETIME NULL,
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS mfa_keys (
     backup_counter INT UNSIGNED NOT NULL,
     backups_last_generated DATETIME NOT NULL,
     backups_last_viewed DATETIME NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+    FOREIGN KEY (account_id) REFERENCES accounts(account_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS mfa_used_backup_codes (

@@ -7,7 +7,7 @@ namespace Phasem\db;
 use Phasem\model\{CurrentUser, User};
 use Teapot\{HttpException, StatusCode};
 
-class Users
+class Accounts
 {
     private $db;
 
@@ -35,12 +35,12 @@ class Users
 
         $now = (new \DateTime())->format(DbConnector::SQL_DATE);
 
-        $result = $this->db->insertRow('users', [
-            'user_fullname' => $fullName,
-            'user_email' => $data['email'],
-            'user_password' => self::hashPassword($data['password']),
-            'user_created' => $now,
-            'user_last_updated' => $now,
+        $result = $this->db->insertRow('accounts', [
+            'fullname' => $fullName,
+            'email' => $data['email'],
+            'password' => self::hashPassword($data['password']),
+            'account_created' => $now,
+            'account_last_updated' => $now,
         ]);
 
         return $result->getId();
@@ -55,11 +55,11 @@ class Users
         $fullName = self::validateFullName($data['fullName']);
 
         $set = [
-            'user_fullname' => $fullName,
-            'user_last_updated' => (new \DateTime())->format(DbConnector::SQL_DATE),
+            'fullname' => $fullName,
+            'account_last_updated' => (new \DateTime())->format(DbConnector::SQL_DATE),
         ];
 
-        $this->db->updateRows('users', $set, ['user_id' => $user->getId()]);
+        $this->db->updateRows('accounts', $set, ['account_id' => $user->getId()]);
     }
 
     public function updateUserEmail(CurrentUser $user, array $data): void
@@ -77,11 +77,11 @@ class Users
         }
 
         $set = [
-            'user_email' => $data['email'],
-            'user_last_updated' => (new \DateTime())->format(DbConnector::SQL_DATE),
+            'email' => $data['email'],
+            'account_last_updated' => (new \DateTime())->format(DbConnector::SQL_DATE),
         ];
 
-        $this->db->updateRows('users', $set, ['user_id' => $user->getId()]);
+        $this->db->updateRows('accounts', $set, ['account_id' => $user->getId()]);
     }
 
     public function updateUserPassword(CurrentUser $user, array $data): void
@@ -98,18 +98,18 @@ class Users
         self::validatePassword($data['newPassword']);
 
         $set = [
-            'user_password' => self::hashPassword($data['newPassword']),
-            'user_last_updated' => (new \DateTime())->format(DbConnector::SQL_DATE),
+            'password' => self::hashPassword($data['newPassword']),
+            'account_last_updated' => (new \DateTime())->format(DbConnector::SQL_DATE),
         ];
 
-        $this->db->updateRows('users', $set, ['user_id' => $user->getId()]);
+        $this->db->updateRows('accounts', $set, ['account_id' => $user->getId()]);
 
         (new AuthTokens())->deactivateOtherTokens($user);
     }
 
     public function getUserByEmail(string $email): ?User
     {
-        $row = $this->db->query("SELECT * FROM users WHERE user_email = ?", [$email])->getFirst();
+        $row = $this->db->query("SELECT * FROM accounts WHERE email = ?", [$email])->getFirst();
 
         if ($row === null) {
             return null;
