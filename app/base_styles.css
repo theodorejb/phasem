@@ -61,9 +61,16 @@ form {
     margin-bottom: 0.5em;
 }
 
-.formSection input[type="text"], .formSection input[type="number"],
-.formSection input[type="email"], .formSection input[type="password"] {
+.formSection input[type="text"], .formSection input[type="number"], .formSection input[type="date"],
+.formSection input[type="email"], .formSection input[type="tel"], .formSection input[type="password"],
+.formSection select {
     width: 20em;
+    box-sizing: border-box;
+}
+
+.formSection textarea {
+    width: 30em;
+    height: 7em;
 }
 
 .formSection label[for] {
@@ -133,6 +140,10 @@ form {
     font-size: 0.75em;
     max-width: 28rem;
     text-align: justify;
+}
+
+.notes {
+    white-space: pre-wrap;
 }
 
 .warning {

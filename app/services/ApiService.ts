@@ -1,4 +1,4 @@
-import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import * as Cookies from 'es-cookie';
@@ -9,8 +9,8 @@ import {User} from '../models/User';
 interface RequestOptions {
     body?: any;
     headers?: HttpHeaders;
-    observe?: 'body';
-    params?: HttpParams;
+    observe?: 'body' | 'events' | 'response';
+    params?: {[param: string]: string | string[]};
     responseType?: 'json';
     reportProgress?: boolean;
     withCredentials?: boolean;
