@@ -6,8 +6,8 @@
         <div class="formSection">
             <label for="name-input">Name</label>
             <input id="name-input" type="text" name="name" [(ngModel)]="profile.fullName" required/>
-            <button [disabled]="profile.fullName === user.fullName || updatingProfile">
-                {{updatingProfile ? 'Updating name...' : 'Update name'}}
+            <button [disabled]="profile.fullName === user.fullName" [ladda]="updatingProfile">
+                Update name
             </button>
         </div>
     </form>
@@ -16,8 +16,8 @@
         <div class="formSection">
             <label for="email-input">Email</label>
             <input id="email-input" type="email" name="email" [(ngModel)]="userEmail.email" required/>
-            <button [disabled]="userEmail.email === user.email || updatingEmail">
-                {{updatingEmail ? 'Updating email...' : 'Update email'}}
+            <button [disabled]="userEmail.email === user.email" [ladda]="updatingEmail">
+                Update email
             </button>
         </div>
     </form>
@@ -32,9 +32,7 @@
             <input id="password-input" type="password" name="password" [(ngModel)]="pwChange.newPassword" required/>
         </div>
         <div class="formSection">
-            <button [disabled]="changingPassword">
-                {{changingPassword ? 'Changing password...' : 'Change password'}}
-            </button>
+            <button [ladda]="changingPassword">Change password</button>
         </div>
     </form>
 </div>
