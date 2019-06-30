@@ -2,18 +2,20 @@
 
 declare(strict_types=1);
 
+use Phasem\App;
+
 require '../../bootstrap.php';
 
 $container = [
     'settings' => [
-        'displayErrorDetails' => Phasem\App::getConfig()['devMode'],
+        'displayErrorDetails' => App::getConfig()['devMode'],
     ],
 ];
 
 require '../../api/errorHandlers.php';
 require '../../api/middleware/auth.php';
 
-$app = new Slim\App($container);
+$app = new \Slim\App($container);
 $outerMiddleware = require '../../api/middleware/headers.php';
 $app->add($outerMiddleware);
 

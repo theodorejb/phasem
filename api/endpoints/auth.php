@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Phasem\App;
 use Phasem\db\{Accounts, AuthTokens, MfaKeys};
 use Slim\Http\{Request, Response};
 use Teapot\{HttpException, StatusCode};
@@ -43,7 +44,7 @@ $app->delete('/token', function (Request $request, Response $response) {
     try {
         $authTokens = new AuthTokens();
         $authTokens->validateRequestAuth($request, false);
-        $authTokens->deactivateToken(\Phasem\App::getUser()->getAuthId());
+        $authTokens->deactivateToken(App::getUser()->getAuthId());
         return $response->withStatus(StatusCode::NO_CONTENT);
     } catch (Exception $e) {
         return $response

@@ -1,5 +1,6 @@
 <?php
 
+use Phasem\App;
 use Phasem\db\{AuthTokens, MfaKeys};
 use Phasem\model\MfaKey;
 use Slim\Http\{Request, Response};
@@ -8,7 +9,7 @@ use Teapot\HttpException;
 $app->group('/two_factor_auth', function (\Slim\App $app) {
     $app->get('/status', function (Request $request, Response $response) {
         $mfaKeys = new MfaKeys();
-        $key = $mfaKeys->getEnabledMfaKey(\Phasem\App::getUser()->getId());
+        $key = $mfaKeys->getEnabledMfaKey(App::getUser()->getId());
 
         $data = [
             'isMfaEnabled' => false,
@@ -26,7 +27,7 @@ $app->group('/two_factor_auth', function (\Slim\App $app) {
     });
 
     $app->post('/setup', function (Request $request, Response $response) {
-        $user = \Phasem\App::getUser();
+        $user = App::getUser();
         $mfaKeys = new MfaKeys();
         $key = $mfaKeys->setupMfa($user->getId());
 
@@ -38,7 +39,7 @@ $app->group('/two_factor_auth', function (\Slim\App $app) {
     });
 
     $app->post('/secret', function (Request $request, Response $response) {
-        $user = \Phasem\App::getUser();
+        $user = App::getUser();
         $mfaKeys = new MfaKeys();
         $key = $mfaKeys->getRequestedMfaKey($user->getId());
         $mfaKeys->validateRequestedKey($key, true);
@@ -60,7 +61,7 @@ $app->group('/two_factor_auth', function (\Slim\App $app) {
             throw new HttpException('Missing required code property');
         }
 
-        $user = \Phasem\App::getUser();
+        $user = App::getUser();
         $mfaKeys = new MfaKeys();
         $key = $mfaKeys->getRequestedMfaKey($user->getId());
         $mfaKeys->validateRequestedKey($key);
@@ -78,7 +79,7 @@ $app->group('/two_factor_auth', function (\Slim\App $app) {
             throw new HttpException('Missing required code property');
         }
 
-        $user = \Phasem\App::getUser();
+        $user = App::getUser();
         $mfaKeys = new MfaKeys();
         $key = $mfaKeys->getEnabledMfaKey($user->getId());
 
@@ -94,7 +95,7 @@ $app->group('/two_factor_auth', function (\Slim\App $app) {
 
     $app->post('/disable', function (Request $request, Response $response) {
         $mfaKeys = new MfaKeys();
-        $key = $mfaKeys->getEnabledMfaKey(\Phasem\App::getUser()->getId());
+        $key = $mfaKeys->getEnabledMfaKey(App::getUser()->getId());
 
         if ($key === null) {
             throw new HttpException('Two-factor authentication is already not enabled');
@@ -108,7 +109,7 @@ $app->group('/two_factor_auth', function (\Slim\App $app) {
         // get current backup codes
         $app->get('', function (Request $request, Response $response) {
             $mfaKeys = new MfaKeys();
-            $key = $mfaKeys->getEnabledMfaKey(\Phasem\App::getUser()->getId());
+            $key = $mfaKeys->getEnabledMfaKey(App::getUser()->getId());
 
             if ($key === null) {
                 throw new HttpException('Two-factor authentication is not enabled');
@@ -123,7 +124,7 @@ $app->group('/two_factor_auth', function (\Slim\App $app) {
         // generate a new set of backup codes
         $app->post('', function (Request $request, Response $response) {
             $mfaKeys = new MfaKeys();
-            $key = $mfaKeys->getEnabledMfaKey(\Phasem\App::getUser()->getId());
+            $key = $mfaKeys->getEnabledMfaKey(App::getUser()->getId());
 
             if ($key === null) {
                 throw new HttpException('Two-factor authentication is not enabled');

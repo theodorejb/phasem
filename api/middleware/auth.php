@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Phasem\App;
 use Phasem\db\AuthTokens;
 use Slim\Http\{Request, Response};
 use Teapot\{HttpException, StatusCode};
@@ -17,7 +18,7 @@ function standard_auth(Request $request, Response $response, callable $next)
  */
 function recent_mfa_completion(Request $request, Response $response, callable $next)
 {
-    $user = \Phasem\App::getUser();
+    $user = App::getUser();
 
     if (!$user) {
         throw new Exception('Authorization must be completed first');

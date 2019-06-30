@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Phasem\api;
-
 use Phasem\App;
 use Phasem\db\ApiRequests;
 use Slim\Http\{Request, Response};
