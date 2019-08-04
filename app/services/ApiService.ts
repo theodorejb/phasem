@@ -47,7 +47,7 @@ export class ApiService {
         return this.baseHeaders.get('Authorization');
     }
 
-    request(method: string, url: string, options: RequestOptions = {}) {
+    request(method: string, url: string, options: RequestOptions = {}, redirectOnError = true) {
         this.initializeBaseHeaders();
 
         if (!options.headers) {
@@ -108,7 +108,7 @@ export class ApiService {
                                 this.unsetCurrentUser();
                             }
 
-                            if (this.router.url !== authUrl) {
+                            if (redirectOnError && this.router.url !== authUrl) {
                                 this.setRedirectUrl(this.router.url);
                                 this.router.navigate([authUrl]);
                             }
@@ -124,8 +124,8 @@ export class ApiService {
             );
     }
 
-    requestData<T>(method: string, url: string, options: RequestOptions = {}) {
-        return this.request(method, url, options)
+    requestData<T>(method: string, url: string, options: RequestOptions = {}, redirectOnError = true) {
+        return this.request(method, url, options, redirectOnError)
             .pipe(
                 map((res: {data: any}) => res.data as T),
             );
@@ -154,7 +154,7 @@ export class ApiService {
         this.baseHeaders = null;
     }
 
-    getCurrentUser(): Observable<User | null> {
+    getCurrentUser(redirectOnError = true): Observable<User | null> {
         if (this.currentUser) {
             return rxOf(this.currentUser);
         }
@@ -166,7 +166,7 @@ export class ApiService {
                 return rxOf(null);
             }
 
-            this.currentUserObs = this.requestData<User>('get','me')
+            this.currentUserObs = this.requestData<User>('get','me', {}, redirectOnError)
                 .pipe(
                     tap(user => {this.currentUser = user;}),
                     publishReplay(1), // cache most recent value
@@ -178,8 +178,9 @@ export class ApiService {
     }
 
     isLoggedIn(): Observable<boolean> {
-        return this.getCurrentUser()
+        return this.getCurrentUser(false)
             .pipe(
+                catchError(() => rxOf(null)),
                 map(user => user !== null),
             );
     }

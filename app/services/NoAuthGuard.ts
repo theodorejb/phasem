@@ -13,7 +13,13 @@ export class NoAuthGuard implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
         return this.apiService.isLoggedIn()
             .pipe(
-                map(isLoggedIn => !isLoggedIn),
+                map(isLoggedIn => {
+                    if (isLoggedIn) {
+                        this.apiService.defaultRedirect();
+                    }
+
+                    return !isLoggedIn;
+                }),
             );
     }
 }
