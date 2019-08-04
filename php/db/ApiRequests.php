@@ -8,7 +8,7 @@ use DateTimeImmutable;
 use PeachySQL\SqlException;
 use Phasem\App;
 use Phasem\model\CurrentUser;
-use Slim\Http\Request;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 class ApiRequests
 {
@@ -27,7 +27,14 @@ class ApiRequests
         if ($request->getMethod() === 'GET') {
             $params = $request->getQueryParams();
         } elseif ($error !== null) {
-            $params = App::hashSensitiveKeys($request->getParams());
+            $params = $request->getQueryParams();
+            $postParams = $request->getParsedBody();
+
+            if ($postParams) {
+                $params = array_merge($params, (array)$postParams);
+            }
+
+            $params = App::hashSensitiveKeys($params);
         } else {
             $params = [];
         }

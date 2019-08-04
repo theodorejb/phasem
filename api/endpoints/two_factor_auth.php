@@ -3,10 +3,12 @@
 use Phasem\App;
 use Phasem\db\{AuthTokens, MfaKeys};
 use Phasem\model\MfaKey;
-use Slim\Http\{Request, Response};
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Routing\RouteCollectorProxy;
 use Teapot\HttpException;
 
-$app->group('/two_factor_auth', function (\Slim\App $app) {
+$app->group('/two_factor_auth', function (RouteCollectorProxy $app) {
     $app->get('/status', function (Request $request, Response $response) {
         $mfaKeys = new MfaKeys();
         $key = $mfaKeys->getEnabledMfaKey(App::getUser()->getId());
@@ -23,7 +25,7 @@ $app->group('/two_factor_auth', function (\Slim\App $app) {
             $data['unusedBackupCount'] = MfaKey::BACKUP_SET_SIZE - count($mfaKeys->getUsedBackupCounters($key));
         }
 
-        return $response->withJson(['data' => $data]);
+        return json_resp($response, ['data' => $data]);
     });
 
     $app->post('/setup', function (Request $request, Response $response) {
@@ -31,7 +33,7 @@ $app->group('/two_factor_auth', function (\Slim\App $app) {
         $mfaKeys = new MfaKeys();
         $key = $mfaKeys->setupMfa($user->getId());
 
-        return $response->withJson([
+        return json_resp($response, [
             'data' => [
                 'backupCodes' => $key->getUnusedBackupCodes([]),
             ],
@@ -45,7 +47,7 @@ $app->group('/two_factor_auth', function (\Slim\App $app) {
         $mfaKeys->validateRequestedKey($key, true);
         $secret = strtoupper($key->getSharedSecret());
 
-        return $response->withJson([
+        return json_resp($response, [
             'data' => [
                 'secret' => implode(' ', str_split($secret, 4)),
                 'qrCode' => $key->makeQrCode($user->getEmail()),
@@ -54,7 +56,8 @@ $app->group('/two_factor_auth', function (\Slim\App $app) {
     });
 
     $app->post('/enable', function (Request $request, Response $response) {
-        $code = $request->getParsedBodyParam('code');
+        $body = $request->getParsedBody();
+        $code = $body['code'] ?? '';
         $code = str_replace(' ', '', $code); // remove any spaces from code
 
         if (!$code) {
@@ -69,11 +72,12 @@ $app->group('/two_factor_auth', function (\Slim\App $app) {
         $mfaKeys->enableMfaKey($key);
         $newToken = (new AuthTokens())->updateMfaCompletion($user->getAuthId());
 
-        return $response->withJson(['token' => $newToken]);
+        return json_resp($response, ['token' => $newToken]);
     });
 
     $app->post('/verify', function (Request $request, Response $response) {
-        $code = $request->getParsedBodyParam('code');
+        $body = $request->getParsedBody();
+        $code = $body['code'] ?? '';
 
         if (!$code) {
             throw new HttpException('Missing required code property');
@@ -90,7 +94,7 @@ $app->group('/two_factor_auth', function (\Slim\App $app) {
         // an enabled key exists - verify the code
         $mfaKeys->validateCode($key, $code);
         $newToken = (new AuthTokens())->updateMfaCompletion($user->getAuthId());
-        return $response->withJson(['token' => $newToken]);
+        return json_resp($response, ['token' => $newToken]);
     });
 
     $app->post('/disable', function (Request $request, Response $response) {
@@ -105,7 +109,7 @@ $app->group('/two_factor_auth', function (\Slim\App $app) {
         return $response->withStatus(204);
     })->add('recent_mfa_completion');
 
-    $app->group('/backup_codes', function () use ($app) {
+    $app->group('/backup_codes', function (RouteCollectorProxy $app) {
         // get current backup codes
         $app->get('', function (Request $request, Response $response) {
             $mfaKeys = new MfaKeys();
@@ -118,7 +122,7 @@ $app->group('/two_factor_auth', function (\Slim\App $app) {
             $usedCounters = $mfaKeys->getUsedBackupCounters($key);
             $unusedCodes = $key->getUnusedBackupCodes($usedCounters);
             $mfaKeys->updateBackupsLastViewed($key);
-            return $response->withJson(['data' => $unusedCodes]);
+            return json_resp($response, ['data' => $unusedCodes]);
         });
 
         // generate a new set of backup codes
@@ -132,7 +136,7 @@ $app->group('/two_factor_auth', function (\Slim\App $app) {
 
             $mfaKeys->regenerateBackupCodes($key); // updates key counter
             $unusedCodes = $key->getUnusedBackupCodes([]);
-            return $response->withJson(['data' => $unusedCodes]);
+            return json_resp($response, ['data' => $unusedCodes]);
         });
     })->add('recent_mfa_completion');
 });

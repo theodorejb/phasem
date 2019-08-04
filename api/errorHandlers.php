@@ -4,70 +4,76 @@ declare(strict_types=1);
 
 use Phasem\App;
 use Phasem\db\ApiRequests;
-use Slim\Http\{Request, Response};
+use Slim\Exception\{HttpMethodNotAllowedException, HttpNotFoundException};
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Routing\RouteContext;
 use Teapot\{HttpException, StatusCode};
 
-$container['notFoundHandler'] = function ()  {
-    return function (Request $request, Response $response) {
-        return $response
-            ->withStatus(StatusCode::NOT_FOUND)
-            ->withJson([
-                'error' => 'Invalid route ' . $request->getUri()->getPath(),
-            ]);
-    };
-};
+return function (
+    Request $request,
+    Throwable $e,
+    bool $displayErrorDetails,
+    bool $logErrors,
+    bool $logErrorDetails
+) use ($app) {
+    $user = App::getUser();
+    $message = $e->getMessage();
+    $headers = [];
 
-$container['notAllowedHandler'] = function () {
-    return function (Request $request, Response $response, array $methods) {
-        $allowedMethods = implode(', ', $methods);
+    if ($e instanceof HttpException) {
+        $status = ($e->getCode() === 0) ? StatusCode::BAD_REQUEST : $e->getCode();
+    } elseif ($e instanceof HttpMethodNotAllowedException) {
+        $status = StatusCode::METHOD_NOT_ALLOWED;
+        $routeContext = RouteContext::fromRequest($request);
+        $methods = $routeContext->getRoutingResults()->getAllowedMethods();
+        $message = 'Method must be one of: ' . implode(', ', $methods);
+        $headers['Allow'] = $methods;
+    } elseif ($e instanceof HttpNotFoundException) {
+        $status = StatusCode::NOT_FOUND;
+        $message = 'Invalid route ' . $request->getUri()->getPath();
+    } else {
+        $status = StatusCode::INTERNAL_SERVER_ERROR;
+    }
 
-        return $response
-            ->withStatus(StatusCode::METHOD_NOT_ALLOWED)
-            ->withHeader('Allow', $allowedMethods)
-            ->withJson([
-                'error' => "Method must be one of: {$allowedMethods}",
-            ]);
-    };
-};
+    if ($user !== null) {
+        (new ApiRequests())->recordRequest($user, $request, $message);
+    } elseif ($logErrors) {
+        $logMessage = $message;
 
-$container['errorHandler'] = function () {
-    return function (Request $request, Response $response, \Exception $e) {
-        if ($e instanceof HttpException) {
-            $status = ($e->getCode() === 0) ? StatusCode::BAD_REQUEST : $e->getCode();
-        } else {
-            $status = StatusCode::INTERNAL_SERVER_ERROR;
+        if ($request->getMethod() === 'POST' && $request->getUri()->getPath() === '/api/token') {
+            $serverParams = $request->getServerParams();
+            $ip = $serverParams['REMOTE_ADDR'] ?? null;
+
+            if ($ip !== null) {
+                $logMessage .= ' | ip: ' . $ip;
+            }
         }
 
-        $user = App::getUser();
-        $message = $e->getMessage();
+        // log to standard error log
+        $logMessage .= ' | endpoint: ' . $request->getUri()->__toString();
+        $logMessage .= ' | method: ' . $request->getMethod();
 
-        if ($user !== null) {
-            (new ApiRequests())->recordRequest($user, $request, $message);
-        } else {
+        if ($logErrorDetails) {
             $body = $request->getParsedBody();
 
-            if ($request->getMethod() === 'POST' && $request->getUri()->getPath() === '/api/token') {
-                $serverParams = $request->getServerParams();
-                $ip = $serverParams['REMOTE_ADDR'] ?? null;
-
-                if ($ip !== null) {
-                    $message .= ' | ip: ' . $ip;
-                }
-            }
-
-            // log to standard error log
-            $message .= ' | endpoint: ' . $request->getUri()->__toString();
-            $message .= ' | method: ' . $request->getMethod();
-
             if ($body !== null) {
-                $message .= ' | body: ' . json_encode(App::hashSensitiveKeys($body));
+                $logMessage .= ' | body: ' . json_encode(App::hashSensitiveKeys($body));
             }
-
-            error_log($message);
         }
 
-        return $response
-            ->withStatus($status)
-            ->withJson(['error' => $e->getMessage()]);
-    };
+        error_log($logMessage);
+    }
+
+    $response = $app->getResponseFactory()->createResponse($status);
+    $json = ['error' => $message];
+
+    if ($displayErrorDetails) {
+        $json['trace'] = $e->getTrace();
+    }
+
+    foreach ($headers as $name => $value) {
+        $response = $response->withHeader($name, $value);
+    }
+
+    return json_resp($response, $json);
 };

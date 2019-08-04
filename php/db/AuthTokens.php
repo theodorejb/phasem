@@ -6,9 +6,8 @@ namespace Phasem\db;
 
 use DateTime;
 use Phasem\App;
-use Phasem\model\CurrentUser;
-use Phasem\model\User;
-use Slim\Http\Request;
+use Phasem\model\{CurrentUser, User};
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Teapot\{HttpException, StatusCode};
 
 class AuthTokens
@@ -119,17 +118,21 @@ class AuthTokens
 
         $mfaLastCompleted = $tokenRow['mfa_last_completed'] ? new DateTime($tokenRow['mfa_last_completed']) : null;
 
-        if ($tokenRow['mfa_enabled'] !== null && $request->getUri()->getPath() !== 'two_factor_auth/verify') {
+        if ($tokenRow['mfa_enabled'] !== null && $request->getUri()->getPath() !== '/api/two_factor_auth/verify') {
             $mfaEnabled = new DateTime($tokenRow['mfa_enabled']);
 
             // require MFA to be completed if it never was completed, or was completed before MFA was reconfigured
             if (!$mfaLastCompleted || $mfaLastCompleted < $mfaEnabled) {
-                // clients should check for this 404 status message and prompt user to enter 2FA code
+                // clients should check for this 401 status message and prompt user to enter 2FA code
                 throw new HttpException(self::TWO_FACTOR_REQUIRED_ERROR, StatusCode::UNAUTHORIZED);
             }
         }
 
-        $userRow = $this->db->query("SELECT * FROM accounts WHERE account_id = ?", [$tokenRow['account_id']])->getFirst();
+        $sql = "SELECT a.*
+                FROM accounts a
+                WHERE a.account_id = ?";
+
+        $userRow = $this->db->query($sql, [$tokenRow['account_id']])->getFirst();
         $userRow['auth_id'] = $tokenRow['auth_id'];
         $userRow['mfa_last_completed'] = $mfaLastCompleted;
         App::setUser(new CurrentUser($userRow));

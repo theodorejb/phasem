@@ -3,3 +3,4 @@
 /public/dist/
 /vendor/
 /config.user.php
+/.phpunit.result.cache
