@@ -13,6 +13,11 @@ and a RESTful API.
 6. Run `composer install`, `npm install`, and `npm run build`
 7. Run PHP tests via `vendor\bin\phpunit`
 
+## Deploying to production
+
+1. Use deploy/server_setup.sh to configure a production Ubuntu VPS.
+2. Run `npm run build-prod`, then `npm run deploy` and follow the prompts.
+
 ## Features
 
 * Back-end REST API built with Slim Framework
@@ -22,6 +27,7 @@ and a RESTful API.
 * Token-based authentication
 * Account settings page (change name, email, and password)
 * Two-factor authentication with recovery codes
+* Zero downtime deployment
 * Users are prompted to reload the page when a front-end update is available
 
 ## Todo
@@ -33,5 +39,4 @@ and a RESTful API.
 - [ ] Allow users to view active sessions with login date, last activity date, and IP address
 - [ ] Display account security events (login, 2FA completion, recovery code used, invalid login/2FA)
 - [ ] Reset password via email (don't leak valid emails)
-- [ ] Zero downtime deployment
 - [ ] Progressive web app manifest

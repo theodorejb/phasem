@@ -2,6 +2,8 @@ CREATE DATABASE phasem
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_0900_ai_ci;
 
+GRANT ALL PRIVILEGES ON phasem.* TO 'phasem'@'localhost';
+
 USE phasem;
 
 CREATE TABLE IF NOT EXISTS accounts (

@@ -2,5 +2,6 @@
 /node_modules/
 /public/dist/
 /vendor/
+/deploy/archive.zip
 /config.user.php
 /.phpunit.result.cache

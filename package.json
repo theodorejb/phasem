@@ -6,6 +6,7 @@
     "build": "ng build --aot",
     "build-prod": "ng build --prod",
     "watch": "ng build --watch --aot",
+    "deploy": "bash deploy/build.sh",
     "lint": "ng lint",
     "test": "mocha"
   },
