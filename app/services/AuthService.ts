@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Observable, of as rxOf} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {map, mergeMap, tap} from 'rxjs/operators';
 import {LoginCredentials, LoginResponse, NewUser} from '../models/User';
 import {ApiService} from "./ApiService";
@@ -28,7 +28,7 @@ export class AuthService {
                                 map(() => true),
                             );
                     } else {
-                        return rxOf(false);
+                        return of(false);
                     }
                 }),
                 tap(() => {this.api.unsetCurrentUser();}),
