@@ -2,7 +2,7 @@ import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import * as Cookies from 'es-cookie';
-import {Observable, of as rxOf, throwError} from 'rxjs';
+import {Observable, of, throwError} from 'rxjs';
 import {catchError, map, publishReplay, refCount, tap} from 'rxjs/operators';
 import {User} from '../models/User';
 
@@ -154,16 +154,16 @@ export class ApiService {
         this.baseHeaders = null;
     }
 
-    getCurrentUser(redirectOnError = true): Observable<User | null> {
+    getCurrentUser(redirectOnError = true): Observable<User> {
         if (this.currentUser) {
-            return rxOf(this.currentUser);
+            return of(this.currentUser);
         }
 
         if (!this.currentUserObs) {
             // avoid multiple network requests if getCurrentUser() is called multiple times
 
             if (!this.getAuthHeader()) {
-                return rxOf(null);
+                return throwError('Missing auth header');
             }
 
             this.currentUserObs = this.requestData<User>('get','me', {}, redirectOnError)
@@ -177,10 +177,16 @@ export class ApiService {
         return this.currentUserObs;
     }
 
-    isLoggedIn(): Observable<boolean> {
+    getCurrentUserOrNull(): Observable<User | null> {
         return this.getCurrentUser(false)
             .pipe(
-                catchError(() => rxOf(null)),
+                catchError(() => of(null)),
+            );
+    }
+
+    isLoggedIn(): Observable<boolean> {
+        return this.getCurrentUserOrNull()
+            .pipe(
                 map(user => user !== null),
             );
     }
