@@ -45,7 +45,7 @@ nano config.user.php
 
 # enable site
 ln -sfn /etc/nginx/sites-available/phasem /etc/nginx/sites-enabled/
-sudo systemctl reload nginx
+sudo service nginx restart
 
 # enable HTTPS - see https://certbot.eff.org/lets-encrypt/ubuntubionic-nginx
 sudo apt-get update
