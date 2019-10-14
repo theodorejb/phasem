@@ -17,8 +17,12 @@ function json_resp(Response $response, array $data): Response
 
 function all_requests(Request $request, RequestHandler $handler): Response
 {
-    $response = $handler->handle($request)
-        ->withHeader('Cache-Control', 'no-cache'); // avoid caching API responses
+    $response = $handler->handle($request);
+
+    if (!$response->hasHeader('Cache-Control')) {
+        // most API responses shouldn't be cached
+        $response = $response->withHeader('Cache-Control', 'no-cache');
+    }
 
     $user = App::getUser();
 

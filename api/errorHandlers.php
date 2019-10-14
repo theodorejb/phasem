@@ -6,7 +6,6 @@ use Phasem\App;
 use Phasem\db\ApiRequests;
 use Slim\Exception\{HttpMethodNotAllowedException, HttpNotFoundException};
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\Routing\RouteContext;
 use Teapot\{HttpException, StatusCode};
 
 return function (
@@ -24,10 +23,7 @@ return function (
         $status = ($e->getCode() === 0) ? StatusCode::BAD_REQUEST : $e->getCode();
     } elseif ($e instanceof HttpMethodNotAllowedException) {
         $status = StatusCode::METHOD_NOT_ALLOWED;
-        $routeContext = RouteContext::fromRequest($request);
-        $methods = $routeContext->getRoutingResults()->getAllowedMethods();
-        $message = 'Method must be one of: ' . implode(', ', $methods);
-        $headers['Allow'] = $methods;
+        $headers['Allow'] = $e->getAllowedMethods();
     } elseif ($e instanceof HttpNotFoundException) {
         $status = StatusCode::NOT_FOUND;
         $message = 'Invalid route ' . $request->getUri()->getPath();
@@ -68,7 +64,7 @@ return function (
     $json = ['error' => $message];
 
     if ($displayErrorDetails) {
-        $json['trace'] = $e->getTrace();
+        $json['trace'] = $e->getTraceAsString();
     }
 
     foreach ($headers as $name => $value) {
