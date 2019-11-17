@@ -1,7 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {Title} from '@angular/platform-browser';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {filter, map} from 'rxjs/operators';
+import {
+    ActivatedRoute,
+    Event,
+    NavigationCancel,
+    NavigationEnd,
+    NavigationError,
+    NavigationStart,
+    Router,
+} from '@angular/router';
 import {ApiService} from '../../services/ApiService';
 
 @Component({
@@ -9,6 +16,8 @@ import {ApiService} from '../../services/ApiService';
     templateUrl: 'app.html',
 })
 export class AppComponent implements OnInit {
+    public loading = false;
+
     constructor(
         public api: ApiService,
         private router: Router,
@@ -17,28 +26,38 @@ export class AppComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.router.events
-            .pipe(
-                filter(event => event instanceof NavigationEnd),
-                map(_ => {
+        this.router.events.subscribe((event: Event) => {
+            switch (true) {
+                case event instanceof NavigationStart: {
+                    this.loading = true;
+                    break;
+                }
+
+                case event instanceof NavigationEnd: {
                     let route = this.activated;
 
                     while (route.firstChild) {
                         route = route.firstChild;
                     }
 
-                    return route.snapshot.data;
-                }),
-            )
-            .subscribe(data => {
-                let title = 'Phasem';
+                    const data = route.snapshot.data;
+                    let title = 'Phasem';
 
-                if (data.title) {
-                    title = `${data.title} | ${title}`;
+                    if (data.title) {
+                        title = `${data.title} | ${title}`;
+                    }
+
+                    this.titleService.setTitle(title);
+                    // intentional fallthrough
                 }
 
-                this.titleService.setTitle(title);
-            });
+                case event instanceof NavigationCancel:
+                case event instanceof NavigationError: {
+                    this.loading = false;
+                    break;
+                }
+            }
+        });
 
         this.api.isLoggedIn().subscribe(() => {/*do nothing*/}); // force login check
     }
