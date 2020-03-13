@@ -22,7 +22,7 @@ import {Spinner} from 'spin.js';
 })
 export class LoadContentsComponent implements AfterViewInit, OnChanges, OnDestroy {
     @Input() loading: boolean;
-    @ViewChild('loader', {static: false}) loader: ElementRef;
+    @ViewChild('loader') loader: ElementRef;
     private spinner: Spinner;
 
     ngAfterViewInit() {
