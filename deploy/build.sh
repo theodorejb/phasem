@@ -3,6 +3,8 @@
 # in order to execute via npm script on Windows, first run:
 # npm config set script-shell "C:\\Program Files\\git\\bin\\bash.exe"
 
+set -e # exit when any command fails
+
 rm -f deploy/archive.zip
 
 composer install --no-dev --optimize-autoloader

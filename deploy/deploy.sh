@@ -3,6 +3,8 @@
 # this should be run from the production server after copying a new build archive
 # this file must have unix line endings
 
+set -e # exit when any command fails
+
 # unzip to new incremented folder
 date=$(date +%Y_%m_%d_%H%M%S)
 folder="/var/www/phasem_$date"
