@@ -43,6 +43,8 @@ source /var/www/phasem/schema.sql;
 quit # exit MySQL
 
 # otherwise restore from backup:
+scp phasemdb_[date].zip user@example.com:~/phasemdb_[date].zip
+unzip phasemdb_[date].zip
 mysql -u [username] -p phasem < phasemdb_[date].sql
 
 # configure site

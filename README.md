@@ -40,3 +40,13 @@ and a RESTful API.
 - [ ] Display account security events (login, 2FA completion, recovery code used, invalid login/2FA)
 - [ ] Reset password via email (don't leak valid emails)
 - [ ] Progressive web app manifest
+
+## DB backup
+
+```shell script
+date=$(date +%Y_%m_%d)
+file="phasemdb_$date"
+mysqldump -u $USER -p phasem > "$file.sql"
+zip "$file" "$file.sql"
+echo "Run scp $USER@example.com:~/$file.zip $file.zip from the destination machine."
+```
