@@ -21,7 +21,6 @@
             "polyfills": "app/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
-              "app/favicon.ico"
             ],
             "styles": [
               "node_modules/ladda/dist/ladda-themeless.min.css",
