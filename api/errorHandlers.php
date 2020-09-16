@@ -15,11 +15,12 @@ return function (
     bool $logErrors,
     bool $logErrorDetails
 ) use ($app) {
-    $user = App::getUser();
+    $user = App::getUserOrNull();
     $message = $e->getMessage();
     $headers = [];
 
     if ($e instanceof HttpException) {
+        /** @var int $status */
         $status = ($e->getCode() === 0) ? StatusCode::BAD_REQUEST : $e->getCode();
     } elseif ($e instanceof HttpMethodNotAllowedException) {
         $status = StatusCode::METHOD_NOT_ALLOWED;
@@ -50,6 +51,7 @@ return function (
         $logMessage .= ' | method: ' . $request->getMethod();
 
         if ($logErrorDetails) {
+            /** @var array|null $body */
             $body = $request->getParsedBody();
 
             if ($body !== null) {

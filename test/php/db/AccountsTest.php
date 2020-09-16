@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class AccountsTest extends TestCase
 {
-    public function testValidateFullName()
+    public function testValidateFullName(): void
     {
         try {
             Accounts::validateFullName('   ');
@@ -20,7 +20,7 @@ class AccountsTest extends TestCase
         Accounts::validateFullName('Valid Name');
     }
 
-    public function testValidateEmail()
+    public function testValidateEmail(): void
     {
         $expectedError = 'Invalid email format';
 
@@ -41,7 +41,7 @@ class AccountsTest extends TestCase
         Accounts::validateEmail('foo@bar.com');
     }
 
-    public function testValidatePassword()
+    public function testValidatePassword(): void
     {
         $expectedError = 'Password must be at least 8 characters in length';
 

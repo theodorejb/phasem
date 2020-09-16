@@ -15,17 +15,23 @@ $app->group('/me', function (RouteCollectorProxy $app) {
     });
 
     $app->post('/profile', function (Request $request, Response $response) {
-        (new Accounts())->updateUserProfile(App::getUser(), $request->getParsedBody());
+        /** @var array $body */
+        $body = $request->getParsedBody();
+        (new Accounts())->updateUserProfile(App::getUser(), $body);
         return $response->withStatus(StatusCode::NO_CONTENT);
     });
 
     $app->post('/email', function (Request $request, Response $response) {
-        (new Accounts())->updateUserEmail(App::getUser(), $request->getParsedBody());
+        /** @var array $body */
+        $body = $request->getParsedBody();
+        (new Accounts())->updateUserEmail(App::getUser(), $body);
         return $response->withStatus(StatusCode::NO_CONTENT);
     });
 
     $app->post('/password', function (Request $request, Response $response) {
-        (new Accounts())->updateUserPassword(App::getUser(), $request->getParsedBody());
+        /** @var array $body */
+        $body = $request->getParsedBody();
+        (new Accounts())->updateUserPassword(App::getUser(), $body);
         return $response->withStatus(StatusCode::NO_CONTENT);
     });
 });

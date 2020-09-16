@@ -10,8 +10,11 @@ use Teapot\{HttpException, StatusCode};
 
 // create a user
 $app->post('/user', function (Request $request, Response $response) {
+    /** @var array $body */
+    $body = $request->getParsedBody();
+
     return json_resp($response, [
-        'id' => (new Accounts())->insertUserFromApi($request->getParsedBody()),
+        'id' => (new Accounts())->insertUserFromApi($body),
     ]);
 });
 

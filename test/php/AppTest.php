@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class AppTest extends TestCase
 {
-    public function testHashSensitiveKeys()
+    public function testHashSensitiveKeys(): void
     {
         $data = ['email' => 'someone@example.com', 'password' => 'fake password'];
         $actual = App::hashSensitiveKeys($data);

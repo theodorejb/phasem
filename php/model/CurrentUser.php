@@ -8,9 +8,8 @@ use DateTime;
 
 class CurrentUser extends User
 {
-    /** @var int */
-    private $authId;
-    private $mfaLastCompleted;
+    private int $authId;
+    private ?DateTime $mfaLastCompleted;
 
     public function __construct(array $data)
     {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Phasem\db;
 
 use DateTimeImmutable;
+use PeachySQL\PeachySql;
 use PeachySQL\SqlException;
 use Phasem\App;
 use Phasem\model\CurrentUser;
@@ -12,7 +13,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 class ApiRequests
 {
-    private $db;
+    private PeachySql $db;
 
     public function __construct()
     {
@@ -74,7 +75,9 @@ class ApiRequests
             $duplicateMsg = 'Failed to execute prepared statement: Duplicate entry';
 
             if (substr($e->getMessage(), 0, strlen($duplicateMsg)) === $duplicateMsg) {
-                return $this->getExistingEndpointId($host, $path);
+                $result = $this->getExistingEndpointId($host, $path);
+                assert($result !== null);
+                return $result;
             }
 
             throw $e;

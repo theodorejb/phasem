@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Phasem\db;
 
 use DateInterval, DateTimeImmutable, Exception;
+use PeachySQL\PeachySql;
 use Phasem\App;
 use Phasem\model\MfaKey;
 use Teapot\HttpException;
 
 class MfaKeys
 {
-    private $db;
+    private PeachySql $db;
 
     public function __construct()
     {
@@ -174,8 +175,10 @@ class MfaKeys
 
         if ($failedAttempts >= 5) {
             $timeToWait = DateInterval::createFromDateString(pow($failedAttempts - 4, 2) . ' seconds');
+            $lastFailed = $key->getLastFailedAttempt();
+            assert($lastFailed !== null);
 
-            if (new DateTimeImmutable() < $key->getLastFailedAttempt()->add($timeToWait)) {
+            if (new DateTimeImmutable() < $lastFailed->add($timeToWait)) {
                 throw new HttpException('Too many failed attempts. Please wait before trying again.', 429);
             }
         }
@@ -237,7 +240,7 @@ class MfaKeys
                 AND counter >= ?";
 
         $rows = $this->db->query($sql, [$key->getId(), $key->getBackupCounter()])->getAll();
-        return array_map(function ($r) { return $r['counter']; }, $rows);
+        return array_map(fn(array $r): int => $r['counter'], $rows);
     }
 
     public function isBackupCodeUsed(int $keyId, int $counter): bool

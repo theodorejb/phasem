@@ -17,19 +17,19 @@ class MfaKey
 {
     const BACKUP_SET_SIZE = 8;
 
-    private $id;
-    private $userId;
-    private $secret; // encrypted
-    private $dateRequested;
-    private $dateEnabled;
-    private $dateDisabled;
-    private $failedAttempts;
-    private $lastFailedAttempt;
-    private $backupCounter;
-    private $backupsLastGenerated;
-    private $backupsLastViewed;
+    private int $id;
+    private int $userId;
+    private string $secret; // encrypted
+    private DateTimeImmutable $dateRequested;
+    private ?DateTimeImmutable $dateEnabled;
+    private ?DateTimeImmutable $dateDisabled;
+    private int $failedAttempts;
+    private ?DateTimeImmutable $lastFailedAttempt;
+    private int $backupCounter;
+    private DateTimeImmutable $backupsLastGenerated;
+    private DateTimeImmutable $backupsLastViewed;
 
-    private $_seed; // raw bytes
+    private ?string $_seed = null; // raw bytes
 
     public function __construct(array $row)
     {

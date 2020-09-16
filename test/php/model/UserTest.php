@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class UserTest extends TestCase
 {
-    public function testVerifyPassword()
+    public function testVerifyPassword(): void
     {
         $user = new User([
             'account_id' => 0,

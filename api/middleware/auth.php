@@ -24,7 +24,7 @@ function all_requests(Request $request, RequestHandler $handler): Response
         $response = $response->withHeader('Cache-Control', 'no-cache');
     }
 
-    $user = App::getUser();
+    $user = App::getUserOrNull();
 
     if ($user !== null) {
         (new ApiRequests())->recordRequest($user, $request);
@@ -44,9 +44,9 @@ function standard_auth(Request $request, RequestHandler $handler): Response
  */
 function recent_mfa_completion(Request $request, RequestHandler $handler): Response
 {
-    $user = App::getUser();
+    $user = App::getUserOrNull();
 
-    if (!$user) {
+    if ($user === null) {
         throw new Exception('Authorization must be completed first');
     }
 

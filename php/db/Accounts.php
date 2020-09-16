@@ -6,10 +6,11 @@ namespace Phasem\db;
 
 use Phasem\model\{CurrentUser, User};
 use Teapot\{HttpException, StatusCode};
+use PeachySQL\PeachySql;
 
 class Accounts
 {
-    private $db;
+    private PeachySql $db;
 
     public function __construct()
     {
@@ -129,7 +130,7 @@ class Accounts
         return $trimmed;
     }
 
-    public static function validateEmail(string $email)
+    public static function validateEmail(string $email): void
     {
         if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
             throw new HttpException('Invalid email format');
@@ -139,7 +140,7 @@ class Accounts
     /**
      * @throws HttpException if password isn't valid
      */
-    public static function validatePassword(string $password)
+    public static function validatePassword(string $password): void
     {
         if (strlen($password) < 8) {
             throw new HttpException('Password must be at least 8 characters in length');
@@ -148,6 +149,8 @@ class Accounts
 
     private static function hashPassword(string $password): string
     {
-        return password_hash($password, PASSWORD_DEFAULT);
+        $result = password_hash($password, PASSWORD_DEFAULT);
+        assert($result !== null);
+        return $result;
     }
 }

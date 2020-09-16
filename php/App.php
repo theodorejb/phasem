@@ -9,9 +9,9 @@ use Phasem\model\CurrentUser;
 
 class App
 {
-    private static $config;
-    private static $user;
-    private static $requestTime;
+    private static array $config;
+    private static ?CurrentUser $user = null;
+    private static int $requestTime;
 
     public static function setRequestTime(): void
     {
@@ -20,10 +20,6 @@ class App
 
     public static function getRequestTimeMs(): int
     {
-        if (self::$requestTime === null) {
-            throw new \Exception('Request time has not been set');
-        }
-
         $ns = hrtime(true) - self::$requestTime;
         return (int)($ns / 1000000);
     }
@@ -33,16 +29,9 @@ class App
         self::$config = $config;
     }
 
-    /**
-     * @throws \Exception if configuration hasn't been set
-     */
     public static function getConfig(): array
     {
-        if (self::$config === null) {
-            throw new \Exception('Config has not been set yet');
-        } else {
-            return self::$config;
-        }
+        return self::$config;
     }
 
     public static function setUser(?CurrentUser $user): void
@@ -50,7 +39,16 @@ class App
         self::$user = $user;
     }
 
-    public static function getUser(): ?CurrentUser
+    public static function getUser(): CurrentUser
+    {
+        if (self::$user === null) {
+            throw new \Exception('Current user has not been set');
+        }
+
+        return self::$user;
+    }
+
+    public static function getUserOrNull(): ?CurrentUser
     {
         return self::$user;
     }

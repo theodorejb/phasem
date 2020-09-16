@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Phasem\db;
 
 use DateTime;
+use PeachySQL\PeachySql;
 use Phasem\App;
 use Phasem\model\{CurrentUser, User};
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -14,7 +15,7 @@ class AuthTokens
 {
     const TWO_FACTOR_REQUIRED_ERROR = 'Two-factor authentication code required';
 
-    private $db;
+    private PeachySql $db;
 
     public function __construct()
     {

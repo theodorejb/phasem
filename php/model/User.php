@@ -8,12 +8,12 @@ use DateTime;
 
 class User implements \JsonSerializable
 {
-    private $id;
-    private $fullName;
-    private $email;
-    private $password;
-    private $dateCreated;
-    private $dateUpdated;
+    private int $id;
+    private string $fullName;
+    private string $email;
+    private string $password;
+    private DateTime $dateCreated;
+    private DateTime $dateUpdated;
 
     public function __construct(array $data)
     {

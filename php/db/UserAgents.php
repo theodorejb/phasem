@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Phasem\db;
 
+use PeachySQL\PeachySql;
+
 class UserAgents
 {
-    private $db;
+    private PeachySql $db;
 
     public function __construct()
     {

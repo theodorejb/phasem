@@ -15,8 +15,8 @@ class DbConnector
 {
     const SQL_DATE = 'Y-m-d H:i:s';
 
-    private static $connection;
-    private static $peachySql;
+    private static ?mysqli $connection = null;
+    private static ?PeachySql $peachySql = null;
 
     /**
      * Returns a mysqli connection to the app database
