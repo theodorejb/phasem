@@ -5,16 +5,16 @@
     ],
     "jsRules": {},
     "rules": {
-    "align": {
-      "options": [
-        "parameters",
-        "statements"
-      ]
-    },
+        "align": {
+            "options": [
+                "parameters",
+                "statements"
+            ]
+        },
         "array-bracket-spacing": [true, "never"],
         "array-type": false,
         "arrow-parens": [true, "ban-single-arg-parens"],
-    "arrow-return-shorthand": true,
+        "arrow-return-shorthand": true,
         "block-spacing": [true, "never"],
         "brace-style": [
             true,
@@ -23,13 +23,12 @@
                 "allowSingleLine": true
             }
         ],
-    "curly": true,
-    "deprecation": {
-      "severity": "warning"
-    },
-    "eofline": true,
+        "curly": true,
+        "deprecation": {
+            "severity": "warning"
+        },
+        "eofline": true,
         "forin": false,
-    "import-spacing": true,
         "indent": [true, "spaces", 4],
         "interface-name": [true, "never-prefix"],
         "interface-over-type-literal": false,
@@ -45,6 +44,12 @@
         "object-literal-key-quotes": [true, "as-needed"],
         "object-literal-shorthand": false,
         "object-literal-sort-keys": false,
+        "ordered-imports": [true, {
+            "grouped-imports": false,
+            "import-sources-order": "case-insensitive",
+            "named-imports-order": "case-insensitive",
+            "module-source-path": "full"
+        }],
         "prefer-const": false,
         "quotemark": false,
         "semicolon": [true, "always", "strict-bound-class-methods"],
@@ -58,31 +63,24 @@
         "ter-func-call-spacing": [true],
         "ter-indent": [true, 4, {"SwitchCase": 1}],
         "ter-padded-blocks": [true, "never"],
-    "typedef-whitespace": {
-      "options": [
-        {
-          "call-signature": "nospace",
-          "index-signature": "nospace",
-          "parameter": "nospace",
-          "property-declaration": "nospace",
-          "variable-declaration": "nospace"
+        "typedef-whitespace": {
+            "options": [
+                {
+                    "call-signature": "nospace",
+                    "index-signature": "nospace",
+                    "parameter": "nospace",
+                    "property-declaration": "nospace",
+                    "variable-declaration": "nospace"
+                },
+                {
+                    "call-signature": "onespace",
+                    "index-signature": "onespace",
+                    "parameter": "onespace",
+                    "property-declaration": "onespace",
+                    "variable-declaration": "onespace"
+                }
+            ]
         },
-        {
-          "call-signature": "onespace",
-          "index-signature": "onespace",
-          "parameter": "onespace",
-          "property-declaration": "onespace",
-          "variable-declaration": "onespace"
-        }
-      ]
-    },
-    "variable-name": {
-      "options": [
-        "ban-keywords",
-        "check-format",
-        "allow-pascal-case"
-      ]
-    },
         "whitespace": [
             true,
             "check-branch",
