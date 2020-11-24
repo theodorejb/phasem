@@ -6,8 +6,5 @@
   ],
   "include": [
     "app/**/*.d.ts"
-  ],
-  "angularCompilerOptions": {
-    "strictTemplates": true
-  }
+  ]
 }
