@@ -24,8 +24,7 @@
             "polyfills": "app/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": true,
-            "assets": [
-            ],
+            "assets": [],
             "styles": [
               "node_modules/ladda/dist/ladda-themeless.min.css",
               "app/base_styles.css"
@@ -68,13 +67,11 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "tsconfig.app.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "app/**/*.ts",
+              "app/**/*.html"
             ]
           }
         }

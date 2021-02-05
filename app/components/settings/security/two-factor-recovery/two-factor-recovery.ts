@@ -7,7 +7,7 @@ import {MfaService} from "../../../../services/MfaService";
 export class TwoFactorRecoveryComponent implements OnInit {
     public error: string;
     public isLoading = true;
-    public isGenerating: boolean = false;
+    public isGenerating = false;
     public backupCodes: string[] = [];
 
     constructor(

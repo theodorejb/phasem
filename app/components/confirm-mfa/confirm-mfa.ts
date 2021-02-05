@@ -7,7 +7,7 @@ import {MfaService} from "../../services/MfaService";
 })
 export class ConfirmMfaComponent {
     public error: string;
-    public submitting: boolean = false;
+    public submitting = false;
     public code = '';
 
     constructor(

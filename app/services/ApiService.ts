@@ -25,7 +25,7 @@ export class ApiService {
     private currentUserObs: Observable<User>;
     private redirectUrl: string | null;
     private currentBuild: string;
-    private newBuildAvailable: boolean = false;
+    private newBuildAvailable = false;
     private lastBuildCheck: Date = new Date();
 
     constructor(private http: HttpClient, private router: Router) {}

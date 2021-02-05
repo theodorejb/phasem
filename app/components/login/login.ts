@@ -9,7 +9,7 @@ import {AuthService} from "../../services/AuthService";
 })
 export class LoginComponent {
     public error: string;
-    public submitting: boolean = false;
+    public submitting = false;
 
     public loginData: LoginCredentials = {
         email: '',

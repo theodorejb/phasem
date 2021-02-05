@@ -9,7 +9,7 @@ import {AuthService} from "../../services/AuthService";
     templateUrl: 'register.html',
 })
 export class RegisterComponent {
-    public submitting: boolean = false;
+    public submitting = false;
     public error: string;
 
     public newUser: NewUser = {

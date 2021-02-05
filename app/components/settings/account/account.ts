@@ -11,11 +11,11 @@ export class AccountComponent implements OnInit {
     public success: string;
     public user: User;
     public profile: UserProfile;
-    public updatingProfile: boolean = false;
+    public updatingProfile = false;
     public userEmail: UserEmail;
-    public updatingEmail: boolean = false;
+    public updatingEmail = false;
     public pwChange: PasswordChange;
-    public changingPassword: boolean = false;
+    public changingPassword = false;
 
     private errorHandler = (error: string) => {
         this.error = error;
