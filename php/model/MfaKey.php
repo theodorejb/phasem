@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Phasem\model;
 
-use BaconQrCode\Renderer\Image\Svg;
+use BaconQrCode\Renderer\Image\SvgImageBackEnd;
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
 use DateTimeImmutable;
 use ParagonIE\ConstantTime\Base32;
-use ParagonIE\MultiFactor\{FIDOU2F, OTP\HOTP};
+use ParagonIE\MultiFactor\{OneTime, OTP\HOTP};
 use ParagonIE\MultiFactor\Vendor\GoogleAuth;
 use Phasem\App;
 use Teapot\HttpException;
@@ -193,20 +195,19 @@ class MfaKey
     public function makeQrCode(string $email): string
     {
         $auth = new GoogleAuth($this->getSeed());
-        $auth->defaultQRCodeWidth = $auth->defaultQRCodeHeight = 250;
+        $auth->defaultQRCodeSize = 200;
 
-        $renderer = new Svg();
-        $renderer->setHeight(200);
-        $renderer->setWidth(200);
+        $renderer = new ImageRenderer(
+            new RendererStyle($auth->defaultQRCodeSize),
+            new SvgImageBackEnd(),
+        );
 
-        ob_start();
         // see https://github.com/google/google-authenticator/wiki/Key-Uri-Format
-        $auth->makeQRCode(new Writer($renderer), 'php://output', $email, 'Phasem', 'Phasem');
-        return ob_get_clean();
+        return $auth->getQRCode(new Writer($renderer), $email, 'Phasem', 'Phasem');
     }
 
-    private function getHOTP(): FIDOU2F
+    private function getHOTP(): OneTime
     {
-        return new FIDOU2F($this->getSeed(), new HOTP(8));
+        return new OneTime($this->getSeed(), new HOTP(8));
     }
 }

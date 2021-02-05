@@ -6,10 +6,10 @@
         "ext-json": "*",
         "ext-mbstring": "*",
         "defuse/php-encryption": "^2.2",
-        "paragonie/multi-factor": "^0.2.2",
         "shrikeh/teapot": "^2.3.1",
         "slim/psr7": "^1.3",
         "slim/slim": "^4.7.1",
+        "theodorejb/multi-factor": "^1.0",
         "theodorejb/peachy-sql": "^6.0.1"
     },
     "require-dev": {
