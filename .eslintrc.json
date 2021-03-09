@@ -43,6 +43,7 @@
         "no-fallthrough": "off",
         "no-irregular-whitespace": "error",
         "no-multi-spaces": ["error", { "ignoreEOLComments": true }],
+        "no-multiple-empty-lines": "error",
         "object-curly-spacing": "error",
         "object-shorthand": "off",
         "padded-blocks": ["error", "never"],
