@@ -23,13 +23,18 @@
             "main": "app/main.ts",
             "polyfills": "app/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": true,
             "assets": [],
             "styles": [
               "node_modules/ladda/dist/ladda-themeless.min.css",
               "app/base_styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {

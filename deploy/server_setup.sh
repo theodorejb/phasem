@@ -29,7 +29,7 @@ mysql_secure_installation # yes to everything
 rm /etc/nginx/sites-enabled/default
 
 # create/deploy initial production build
-npm run build-prod && npm run deploy # run locally, not on server
+npm run build && npm run deploy # run locally, not on server
 
 # set up MySQL user, database, and schema
 mysql -u root -p

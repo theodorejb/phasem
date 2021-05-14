@@ -2,8 +2,8 @@ import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import * as Cookies from 'es-cookie';
-import {Observable, of, throwError} from 'rxjs';
-import {catchError, map, publishReplay, refCount, tap} from 'rxjs/operators';
+import {Observable, of, ReplaySubject, throwError} from 'rxjs';
+import {catchError, map, share, tap} from 'rxjs/operators';
 import {User} from '../models/User';
 
 interface RequestOptions {
@@ -119,7 +119,7 @@ export class ApiService {
                         }
                     }
 
-                    return throwError(message);
+                    return throwError(() => new Error(message));
                 }),
             );
     }
@@ -163,14 +163,14 @@ export class ApiService {
             // avoid multiple network requests if getCurrentUser() is called multiple times
 
             if (!this.getAuthHeader()) {
-                return throwError('Missing auth header');
+                return throwError(() => new Error('Missing auth header'));
             }
 
             this.currentUserObs = this.requestData<User>('get','me', {}, redirectOnError)
                 .pipe(
                     tap(user => {this.currentUser = user;}),
-                    publishReplay(1), // cache most recent value
-                    refCount(), // keep observable alive as long as there are subscribers
+                    // cache most recent value and share with multiple subscribers
+                    share({connector: () => new ReplaySubject(1)}),
                 );
         }
 

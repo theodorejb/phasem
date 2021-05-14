@@ -10,14 +10,14 @@ and a RESTful API.
 3. Start MySQL and enable MySQL extension in php.ini
 4. Include phasem.conf file in nginx.conf http block
 5. From nginx directory, run `start nginx` and `php-cgi -b 127.0.0.1:9000`
-6. Run `composer install`, `npm install`, and `npm run build`
+6. Run `composer install`, `npm install`, and `npm run dev`
 7. Run PHP tests via `vendor\bin\phpunit`
 8. Run static analysis type checks via `vendor\bin\psalm`
 
 ## Deploying to production
 
 1. Use deploy/server_setup.sh to configure a production Ubuntu VPS.
-2. Run `npm run build-prod`, then `npm run deploy` and follow the prompts.
+2. Run `npm run build`, then `npm run deploy` and follow the prompts.
 
 ## Features
 
