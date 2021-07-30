@@ -9,7 +9,7 @@ use Phasem\model\CurrentUser;
 
 class App
 {
-    private static array $config;
+    private static ?Config $config = null;
     private static ?CurrentUser $user = null;
     private static int $requestTime;
 
@@ -24,13 +24,17 @@ class App
         return (int)($ns / 1000000);
     }
 
-    public static function setConfig(array $config): void
+    public static function setConfig(Config $config): void
     {
         self::$config = $config;
     }
 
-    public static function getConfig(): array
+    public static function getConfig(): Config
     {
+        if (self::$config === null) {
+            throw new \Exception('App configuration has not been set');
+        }
+
         return self::$config;
     }
 
@@ -55,13 +59,13 @@ class App
 
     public static function encrypt(string $plaintext, bool $rawBinary = false): string
     {
-        $key = Key::loadFromAsciiSafeString(self::getConfig()['encryptionKey']);
+        $key = Key::loadFromAsciiSafeString(self::getConfig()->getEncryptionKey());
         return Crypto::encrypt($plaintext, $key, $rawBinary);
     }
 
     public static function decrypt(string $ciphertext, bool $rawBinary = false): string
     {
-        $key = Key::loadFromAsciiSafeString(self::getConfig()['encryptionKey']);
+        $key = Key::loadFromAsciiSafeString(self::getConfig()->getEncryptionKey());
         return Crypto::decrypt($ciphertext, $key, $rawBinary);
     }
 

@@ -49,9 +49,8 @@ mysql -u [username] -p phasem < phasemdb_[date].sql
 
 # configure site
 cd /var/www/phasem
-cp config.php config.user.php
-nano config.user.php
-# edit file to set appropriate settings
+touch AppConfig.php
+# Class should extend php/Config.php. Set dev env to false for production.
 
 # enable site
 ln -sfn /etc/nginx/sites-available/phasem /etc/nginx/sites-enabled/

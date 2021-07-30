@@ -25,7 +25,7 @@ $app->group('/api/auth', function (RouteCollectorProxy $app) {
 $app->addRoutingMiddleware();
 $app->add('all_requests');
 
-$errorMiddleware = $app->addErrorMiddleware(App::getConfig()['devMode'], true, true);
+$errorMiddleware = $app->addErrorMiddleware(App::getConfig()->isDevEnv(), true, true);
 $errorMiddleware->setDefaultErrorHandler(require '../../api/errorHandlers.php');
 $app->addBodyParsingMiddleware();
 

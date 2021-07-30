@@ -14,11 +14,12 @@
         "theodorejb/peachy-sql": "^6.0.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.5",
+        "phpunit/phpunit": "^9.5.8",
         "psalm/plugin-phpunit": "^0.16.1",
-        "vimeo/psalm": "^4.8.1"
+        "vimeo/psalm": "^4.9.2"
     },
     "autoload": {
+        "classmap": ["AppConfig.php"],
         "psr-4": {"Phasem\\": "php/"}
     }
 }

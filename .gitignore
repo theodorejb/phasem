@@ -3,5 +3,5 @@
 /public/dist/
 /vendor/
 /deploy/archive.zip
-/config.user.php
+/AppConfig.php
 /.phpunit.result.cache

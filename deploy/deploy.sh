@@ -11,7 +11,7 @@ folder="/var/www/phasem_$date"
 unzip -q ~/phasem.zip -d $folder
 
 # copy current config file
-cp /var/www/phasem/config.user.php $folder/config.user.php
+cp /var/www/phasem/AppConfig.php $folder/AppConfig.php
 
 # copy nginx configuration if it doesn't exist yet
 cp --no-clobber $folder/phasem_prod.conf /etc/nginx/sites-available/phasem

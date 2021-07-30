@@ -15,14 +15,6 @@ require 'vendor/autoload.php';
 
 App::setRequestTime();
 
-// read config
-$config = require 'config.php';
-
-if (is_readable(__DIR__ . '/config.user.php')) {
-    $localConfig = require 'config.user.php';
-    $config = array_replace_recursive($config, $localConfig);
+if (class_exists(AppConfig::class)) {
+    App::setConfig(new AppConfig());
 }
-
-App::setConfig($config);
-
-unset($config, $localConfig);

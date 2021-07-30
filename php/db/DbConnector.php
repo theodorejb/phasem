@@ -25,9 +25,8 @@ class DbConnector
     public static function getConnection(): mysqli
     {
         if (self::$connection === null) {
-            $db = App::getConfig()['db'];
-
-            self::$connection = new mysqli($db['host'], $db['username'], $db['password'], $db['database']);
+            $c = App::getConfig();
+            self::$connection = new mysqli($c->getHost(), $c->getUsername(), $c->getPassword(), $c->getDatabase());
 
             if (self::$connection->connect_errno !== 0) {
                 throw new \Exception('Failed to connect to MySQL: ' . self::$connection->connect_error);
