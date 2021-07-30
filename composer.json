@@ -3,7 +3,7 @@
     "description": "Quickly get started with a PHP/Angular/Slim/Nginx/MySQL web app",
     "type": "project",
     "require": {
-        "php": ">=7.4",
+        "php": ">=8.0",
         "ext-json": "*",
         "ext-mbstring": "*",
         "defuse/php-encryption": "^v2.3.1",

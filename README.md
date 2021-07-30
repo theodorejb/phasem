@@ -6,7 +6,7 @@ and a RESTful API.
 ## Getting started
 
 1. Download and unzip this project
-2. Install PHP 7.4+, Composer, Node.js, MySQL, and nginx.
+2. Install PHP 8.0+, Composer, Node.js, MySQL, and nginx.
 3. Start MySQL and enable MySQL extension in php.ini
 4. Include phasem.conf file in nginx.conf http block
 5. From nginx directory, run `start nginx` and `php-cgi -b 127.0.0.1:9000`
@@ -23,7 +23,7 @@ and a RESTful API.
 
 * Back-end REST API built with Slim Framework
 * Front-end built with Angular and TypeScript
-* TypeScript code is standardized via TSLint
+* TypeScript/Angular code is standardized via ESLint
 * User registration
 * Token-based authentication
 * Account settings page (change name, email, and password)
