@@ -15,6 +15,9 @@ use ParagonIE\MultiFactor\Vendor\GoogleAuth;
 use Phasem\App;
 use Teapot\HttpException;
 
+/**
+ * @psalm-type MfaKeyRow array{key_id: int, account_id: int, secret: string, mfa_requested: string, mfa_enabled: string|null, mfa_disabled: string|null, failed_attempts: int, last_failed_attempt: string|null, backup_counter: int, backups_last_generated: string, backups_last_viewed: string}
+ */
 class MfaKey
 {
     const BACKUP_SET_SIZE = 8;
@@ -33,6 +36,9 @@ class MfaKey
 
     private ?string $_seed = null; // raw bytes
 
+    /**
+     * @param MfaKeyRow $row
+     */
     public function __construct(array $row)
     {
         $this->id = $row['key_id'];

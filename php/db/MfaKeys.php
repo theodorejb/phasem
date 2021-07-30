@@ -10,6 +10,9 @@ use Phasem\App;
 use Phasem\model\MfaKey;
 use Teapot\HttpException;
 
+/**
+ * @psalm-import-type MfaKeyRow from \Phasem\model\MfaKey
+ */
 class MfaKeys
 {
     private PeachySql $db;
@@ -102,6 +105,7 @@ class MfaKeys
                 AND mfa_enabled IS NOT NULL
                 AND mfa_disabled IS NULL";
 
+        /** @var MfaKeyRow|null $row */
         $row = $this->db->query($sql, [$userId])->getFirst();
         return is_null($row) ? null : new MfaKey($row);
     }
@@ -116,6 +120,7 @@ class MfaKeys
                 AND mfa_enabled IS NULL
                 AND mfa_disabled IS NULL";
 
+        /** @var MfaKeyRow|null $row */
         $row = $this->db->query($sql, [$userId])->getFirst();
         return is_null($row) ? null : new MfaKey($row);
     }

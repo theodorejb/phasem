@@ -90,6 +90,7 @@ class AuthTokens
                 AND t.auth_token_deactivated IS NULL";
 
         $parts = self::tokenParts(substr($authHeader, strlen($bearer)));
+        /** @var null|array{account_id: int, auth_id: int, verifier: string, auth_token_last_renewed: string, mfa_last_completed: string|null, user_agent: string|null, mfa_enabled: string|null} $tokenRow */
         $tokenRow = $this->db->query($sql, [$parts['selector']])->getFirst();
 
         if ($tokenRow === null || !hash_equals($tokenRow['verifier'], $parts['verifierHash'])) {

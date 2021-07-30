@@ -39,6 +39,7 @@ return function (
 
         if ($request->getMethod() === 'POST' && $request->getUri()->getPath() === '/api/token') {
             $serverParams = $request->getServerParams();
+            /** @var string|null $ip */
             $ip = $serverParams['REMOTE_ADDR'] ?? null;
 
             if ($ip !== null) {
