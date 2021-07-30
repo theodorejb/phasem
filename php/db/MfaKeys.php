@@ -262,4 +262,25 @@ class MfaKeys
             'date_used' => date(DbConnector::SQL_DATE),
         ]);
     }
+
+    public static function getCodeFromBody(array|null|object $body): string
+    {
+        if (!is_array($body) || !isset($body['code'])) {
+            throw new HttpException('Missing required code property');
+        }
+
+        $code = $body['code'];
+
+        if (gettype($code) !== 'string') {
+            throw new HttpException('code property must be a string');
+        }
+
+        $code = str_replace(' ', '', $code); // remove any spaces from code
+
+        if ($code === '') {
+            throw new HttpException('code property cannot be blank');
+        }
+
+        return $code;
+    }
 }

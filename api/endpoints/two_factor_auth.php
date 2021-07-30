@@ -58,13 +58,7 @@ $app->group('/two_factor_auth', function (RouteCollectorProxy $app) {
 
     $app->post('/enable', function (Request $request, Response $response) {
         $body = $request->getParsedBody();
-        $code = $body['code'] ?? '';
-        $code = str_replace(' ', '', $code); // remove any spaces from code
-
-        if (!$code) {
-            throw new HttpException('Missing required code property');
-        }
-
+        $code = MfaKeys::getCodeFromBody($body);
         $user = App::getUser();
         $mfaKeys = new MfaKeys();
         $key = $mfaKeys->getRequestedMfaKey($user->getId());
@@ -79,12 +73,7 @@ $app->group('/two_factor_auth', function (RouteCollectorProxy $app) {
 
     $app->post('/verify', function (Request $request, Response $response) {
         $body = $request->getParsedBody();
-        $code = $body['code'] ?? '';
-
-        if (!$code) {
-            throw new HttpException('Missing required code property');
-        }
-
+        $code = MfaKeys::getCodeFromBody($body);
         $user = App::getUser();
         $mfaKeys = new MfaKeys();
         $key = $mfaKeys->getEnabledMfaKey($user->getId());
