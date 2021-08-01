@@ -1,4 +1,3 @@
-api\
 php\
 public\
 vendor\

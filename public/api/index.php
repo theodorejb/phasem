@@ -3,30 +3,29 @@
 declare(strict_types=1);
 
 use Phasem\App;
+use Phasem\middleware\{AllRequests, ErrorHandler, StandardAuth};
+use Phasem\routes\{Auth, Me, TwoFactorAuth};
 use Slim\Factory\AppFactory;
 use Slim\Routing\RouteCollectorProxy;
 
 require '../../bootstrap.php';
-require '../../api/middleware/auth.php';
 
 $app = AppFactory::create();
 
 // endpoints with standard authorization
 $app->group('/api', function (RouteCollectorProxy $app) {
-    require '../../api/endpoints/me.php';
-    require '../../api/endpoints/two_factor_auth.php';
-})->add('standard_auth');
+    $app->group('/me', Me::class);
+    $app->group('/two_factor_auth', TwoFactorAuth::class);
+})->add(StandardAuth::class);
 
 // endpoints without standard authorization
-$app->group('/api/auth', function (RouteCollectorProxy $app) {
-    require '../../api/endpoints/auth.php';
-});
+$app->group('/api/auth', Auth::class);
 
 $app->addRoutingMiddleware();
-$app->add('all_requests');
+$app->add(AllRequests::class);
 
 $errorMiddleware = $app->addErrorMiddleware(App::getConfig()->isDevEnv(), true, true);
-$errorMiddleware->setDefaultErrorHandler(require '../../api/errorHandlers.php');
+$errorMiddleware->setDefaultErrorHandler(ErrorHandler::getHandler($app));
 $app->addBodyParsingMiddleware();
 
 $app->run();
