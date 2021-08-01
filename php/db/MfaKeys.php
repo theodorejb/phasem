@@ -244,6 +244,7 @@ class MfaKeys
                 WHERE key_id = ?
                 AND counter >= ?";
 
+        /** @var list<array{counter: int}> $rows */
         $rows = $this->db->query($sql, [$key->getId(), $key->getBackupCounter()])->getAll();
         return array_map(fn(array $r): int => $r['counter'], $rows);
     }

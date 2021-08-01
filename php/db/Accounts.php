@@ -8,6 +8,9 @@ use Phasem\model\{CurrentUser, User};
 use Teapot\{HttpException, StatusCode};
 use PeachySQL\PeachySql;
 
+/**
+ * @psalm-import-type UserRow from \Phasem\model\User
+ */
 class Accounts
 {
     private PeachySql $db;
@@ -17,10 +20,14 @@ class Accounts
         $this->db = DbConnector::getDatabase();
     }
 
-    public function insertUserFromApi(array $data): int
+    public function insertUserFromApi(array|object|null $data): int
     {
-        if (!isset($data['fullName'], $data['email'], $data['password'])) {
-            throw new HttpException('Name, email, and password must be set');
+        if (!is_array($data) || !isset($data['fullName'], $data['email'], $data['password'])) {
+            throw new HttpException('fullName, email, and password properties must be set');
+        }
+
+        if (!is_string($data['fullName']) || !is_string($data['email']) || !is_string($data['password'])) {
+            throw new HttpException('Name, email, and password must be strings');
         }
 
         $fullName = self::validateFullName($data['fullName']);
@@ -47,10 +54,14 @@ class Accounts
         return $result->getId();
     }
 
-    public function updateUserProfile(CurrentUser $user, array $data): void
+    public function updateUserProfile(CurrentUser $user, array|object|null $data): void
     {
-        if (!isset($data['fullName'])) {
+        if (!is_array($data) || !isset($data['fullName'])) {
             throw new HttpException('Missing required fullName property');
+        }
+
+        if (!is_string($data['fullName'])) {
+            throw new HttpException('Name must be a string');
         }
 
         $fullName = self::validateFullName($data['fullName']);
@@ -63,10 +74,14 @@ class Accounts
         $this->db->updateRows('accounts', $set, ['account_id' => $user->getId()]);
     }
 
-    public function updateUserEmail(CurrentUser $user, array $data): void
+    public function updateUserEmail(CurrentUser $user, array|object|null $data): void
     {
-        if (!isset($data['email'])) {
+        if (!is_array($data) || !isset($data['email'])) {
             throw new HttpException('Missing required email property');
+        }
+
+        if (!is_string($data['email'])) {
+            throw new HttpException('Email must be a string');
         }
 
         // todo: consider sending a confirmation link to the email to avoid leaking valid emails for other users
@@ -85,10 +100,14 @@ class Accounts
         $this->db->updateRows('accounts', $set, ['account_id' => $user->getId()]);
     }
 
-    public function updateUserPassword(CurrentUser $user, array $data): void
+    public function updateUserPassword(CurrentUser $user, array|object|null $data): void
     {
-        if (!isset($data['currentPassword'], $data['newPassword'])) {
+        if (!is_array($data) || !isset($data['currentPassword'], $data['newPassword'])) {
             throw new HttpException('currentPassword and newPassword properties are required');
+        }
+
+        if (!is_string($data['currentPassword']) || !is_string($data['newPassword'])) {
+            throw new HttpException('Current and new password must be strings');
         }
 
         // todo: rate limit these attempts
@@ -110,6 +129,7 @@ class Accounts
 
     public function getUserByEmail(string $email): ?User
     {
+        /** @var UserRow|null $row */
         $row = $this->db->query("SELECT * FROM accounts WHERE email = ?", [$email])->getFirst();
 
         if ($row === null) {

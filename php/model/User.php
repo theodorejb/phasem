@@ -6,6 +6,9 @@ namespace Phasem\model;
 
 use DateTime;
 
+/**
+ * @psalm-type UserRow array{account_id: int, fullname: string, email: string, password: string, account_created: string, account_last_updated: string}
+ */
 class User implements \JsonSerializable
 {
     private int $id;
@@ -15,6 +18,9 @@ class User implements \JsonSerializable
     private DateTime $dateCreated;
     private DateTime $dateUpdated;
 
+    /**
+     * @param UserRow $data
+     */
     public function __construct(array $data)
     {
         $this->id = $data['account_id'];

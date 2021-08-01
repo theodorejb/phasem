@@ -18,6 +18,7 @@ class UserAgents
     public function getUserAgentId(string $userAgent): int
     {
         $userAgent = self::trimUserAgent($userAgent);
+        /** @var null|array{user_agent_id: int} $existing */
         $existing = $this->db->selectFrom('SELECT user_agent_id FROM user_agents')
             ->where(['user_agent' => $userAgent])->query()->getFirst();
 

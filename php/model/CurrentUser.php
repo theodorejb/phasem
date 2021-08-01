@@ -11,6 +11,9 @@ class CurrentUser extends User
     private int $authId;
     private ?DateTime $mfaLastCompleted;
 
+    /**
+     * @param array{account_id: int, fullname: string, email: string, password: string, account_created: string, account_last_updated: string, auth_id: int, mfa_last_completed: ?DateTime} $data
+     */
     public function __construct(array $data)
     {
         parent::__construct($data);

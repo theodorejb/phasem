@@ -10,7 +10,6 @@ use Teapot\{HttpException, StatusCode};
 
 // create a user
 $app->post('/user', function (Request $request, Response $response) {
-    /** @var array $body */
     $body = $request->getParsedBody();
 
     return json_resp($response, [
@@ -22,8 +21,16 @@ $app->post('/user', function (Request $request, Response $response) {
 $app->post('/token', function (Request $request, Response $response) {
     $data = $request->getParsedBody();
 
-    if (empty($data['email']) || empty($data['password'])) {
-        throw new HttpException('Email and password cannot be blank');
+    if (!is_array($data) || !isset($data['email'], $data['password'])) {
+        throw new HttpException('Missing email and password properties');
+    }
+
+    if (!is_string($data['email']) || $data['email'] === '') {
+        throw new HttpException('Email must be a non-blank string');
+    }
+
+    if (!is_string($data['password']) || $data['password'] === '') {
+        throw new HttpException('Password must be a non-blank string');
     }
 
     // todo: log failed login attempts in database with IP address

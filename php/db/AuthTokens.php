@@ -11,6 +11,9 @@ use Phasem\model\{CurrentUser, User};
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Teapot\{HttpException, StatusCode};
 
+/**
+ * @psalm-import-type UserRow from \Phasem\model\User
+ */
 class AuthTokens
 {
     const TWO_FACTOR_REQUIRED_ERROR = 'Two-factor authentication code required';
@@ -73,7 +76,7 @@ class AuthTokens
 
         $bearer = 'Bearer ';
 
-        if (strpos($authHeader, $bearer) !== 0) {
+        if (!str_starts_with($authHeader, $bearer)) {
             throw new HttpException('Authorization header must use Bearer authentication scheme', StatusCode::UNAUTHORIZED);
         }
 
@@ -134,6 +137,7 @@ class AuthTokens
                 FROM accounts a
                 WHERE a.account_id = ?";
 
+        /** @var UserRow $userRow */
         $userRow = $this->db->query($sql, [$tokenRow['account_id']])->getFirst();
         $userRow['auth_id'] = $tokenRow['auth_id'];
         $userRow['mfa_last_completed'] = $mfaLastCompleted;
@@ -164,6 +168,9 @@ class AuthTokens
         return bin2hex(random_bytes(32));
     }
 
+    /**
+     * @return array{selector: string, verifier: string, verifierHash: string}
+     */
     private static function tokenParts(string $token): array
     {
         if (strlen($token) !== 64) {

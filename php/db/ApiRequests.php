@@ -86,6 +86,7 @@ class ApiRequests
 
     private function getExistingEndpointId(string $host, string $path): ?int
     {
+        /** @var null|array{endpoint_id: int} $existing */
         $existing = $this->db->selectFrom('SELECT endpoint_id FROM api_endpoints')
             ->where(['host' => $host, 'path' => $path])->query()->getFirst();
 

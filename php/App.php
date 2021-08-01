@@ -79,7 +79,7 @@ class App
 
         foreach ($properties as $property) {
             if (isset($data[$property]) && $data[$property] !== '') {
-                $data[$property] = hash('sha256', $data[$property]);
+                $data[$property] = hash('sha256', (string) $data[$property]);
             }
         }
 
