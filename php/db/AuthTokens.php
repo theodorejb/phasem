@@ -7,7 +7,7 @@ namespace Phasem\db;
 use DateTime;
 use PeachySQL\PeachySql;
 use Phasem\App;
-use Phasem\model\{CurrentUser, User};
+use Phasem\model\{CurrentUser, TokenParts, User};
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Teapot\{HttpException, StatusCode};
 
@@ -38,8 +38,8 @@ class AuthTokens
 
         $this->db->insertRow('auth_tokens', [
             'account_id' => $user->getId(),
-            'selector' => $parts['selector'],
-            'verifier' => $parts['verifierHash'],
+            'selector' => $parts->selector,
+            'verifier' => $parts->verifierHash,
             'auth_token_created' => $now,
             'auth_token_last_renewed' => $now,
             'auth_token_renew_count' => 0,
@@ -94,9 +94,9 @@ class AuthTokens
 
         $parts = self::tokenParts(substr($authHeader, strlen($bearer)));
         /** @var null|array{account_id: int, auth_id: int, verifier: string, auth_token_last_renewed: string, mfa_last_completed: string|null, user_agent: string|null, mfa_enabled: string|null} $tokenRow */
-        $tokenRow = $this->db->query($sql, [$parts['selector']])->getFirst();
+        $tokenRow = $this->db->query($sql, [$parts->selector])->getFirst();
 
-        if ($tokenRow === null || !hash_equals($tokenRow['verifier'], $parts['verifierHash'])) {
+        if ($tokenRow === null || !hash_equals($tokenRow['verifier'], $parts->verifierHash)) {
             throw new HttpException('Invalid authentication token', StatusCode::UNAUTHORIZED);
         }
 
@@ -155,8 +155,8 @@ class AuthTokens
 
         $set = [
             'mfa_last_completed' => date(DbConnector::SQL_DATE),
-            'selector' => $parts['selector'],
-            'verifier' => $parts['verifierHash'],
+            'selector' => $parts->selector,
+            'verifier' => $parts->verifierHash,
         ];
 
         $this->db->updateRows('auth_tokens', $set, ['auth_id' => $authId]);
@@ -168,10 +168,7 @@ class AuthTokens
         return bin2hex(random_bytes(32));
     }
 
-    /**
-     * @return array{selector: string, verifier: string, verifierHash: string}
-     */
-    private static function tokenParts(string $token): array
+    private static function tokenParts(string $token): TokenParts
     {
         if (strlen($token) !== 64) {
             throw new HttpException('Invalid authentication token', StatusCode::UNAUTHORIZED);
@@ -179,10 +176,6 @@ class AuthTokens
 
         [$selector, $verifier] = [substr($token, 0, 32), substr($token, 32)];
 
-        return [
-            'selector' => $selector,
-            'verifier' => $verifier,
-            'verifierHash' => hash('sha256', $verifier, true),
-        ];
+        return new TokenParts($selector, $verifier, hash('sha256', $verifier, true));
     }
 }
