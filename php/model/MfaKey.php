@@ -16,7 +16,7 @@ use Phasem\App;
 use Teapot\HttpException;
 
 /**
- * @psalm-type MfaKeyRow array{key_id: int, account_id: int, secret: string, mfa_requested: string, mfa_enabled: string|null, mfa_disabled: string|null, failed_attempts: int, last_failed_attempt: string|null, backup_counter: int, backups_last_generated: string, backups_last_viewed: string}
+ * @psalm-type MfaKeyRow = array{key_id: int, account_id: int, secret: string, mfa_requested: string, mfa_enabled: string|null, mfa_disabled: string|null, failed_attempts: int, last_failed_attempt: string|null, backup_counter: int, backups_last_generated: string, backups_last_viewed: string}
  */
 class MfaKey
 {

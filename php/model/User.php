@@ -7,7 +7,7 @@ namespace Phasem\model;
 use DateTime;
 
 /**
- * @psalm-type UserRow array{account_id: int, fullname: string, email: string, password: string, account_created: string, account_last_updated: string}
+ * @psalm-type UserRow = array{account_id: int, fullname: string, email: string, password: string, account_created: string, account_last_updated: string}
  */
 class User implements \JsonSerializable
 {
