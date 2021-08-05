@@ -26,8 +26,8 @@ export class LoginComponent {
         this.submitting = true;
 
         this.authService.logIn(this.loginData)
-            .subscribe(
-                resp => {
+            .subscribe({
+                next: resp => {
                     this.apiService.setAuth(resp.token, true);
 
                     if (resp.isMfaEnabled) {
@@ -36,8 +36,8 @@ export class LoginComponent {
                         this.apiService.defaultRedirect();
                     }
                 },
-                error => {this.error = error;},
-            )
+                error: error => {this.error = error;},
+            })
             .add(() => {this.submitting = false;});
     }
 }

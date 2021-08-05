@@ -16,12 +16,12 @@ export class TwoFactorRecoveryComponent implements OnInit {
 
     ngOnInit() {
         this.mfaService.getBackupCodes()
-            .subscribe(
-                backupCodes => {
+            .subscribe({
+                next: backupCodes => {
                     this.backupCodes = backupCodes;
                 },
-                error => {this.error = error;},
-            )
+                error: error => {this.error = error;},
+            })
             .add(() => {this.isLoading = false;});
     }
 
@@ -29,10 +29,10 @@ export class TwoFactorRecoveryComponent implements OnInit {
         this.isGenerating = true;
 
         this.mfaService.generateBackupCodes()
-            .subscribe(
-                backupCodes => {this.backupCodes = backupCodes;},
-                error => {this.error = error;},
-            )
+            .subscribe({
+                next: backupCodes => {this.backupCodes = backupCodes;},
+                error: error => {this.error = error;},
+            })
             .add(() => {this.isGenerating = false;});
     }
 }

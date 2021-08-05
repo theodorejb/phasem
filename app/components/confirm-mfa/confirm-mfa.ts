@@ -19,13 +19,13 @@ export class ConfirmMfaComponent {
         this.submitting = true;
 
         this.mfaService.verifyCode(this.code)
-            .subscribe(
-                resp => {
+            .subscribe({
+                next: resp => {
                     this.apiService.setAuth(resp.token, true);
                     this.apiService.defaultRedirect();
                 },
-                error => {this.error = error;},
-            )
+                error: error => {this.error = error;},
+            })
             .add(() => {this.submitting = false;});
     }
 }

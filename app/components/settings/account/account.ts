@@ -28,8 +28,8 @@ export class AccountComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.api.getCurrentUser().subscribe(
-            user => {
+        this.api.getCurrentUser().subscribe({
+            next: user => {
                 this.user = user;
 
                 this.profile = {
@@ -45,23 +45,23 @@ export class AccountComponent implements OnInit {
                     newPassword: '',
                 };
             },
-            this.errorHandler,
-        );
+            error: this.errorHandler,
+        });
     }
 
     updateProfile() {
         this.updatingProfile = true;
 
         this.userService.updateProfile(this.profile)
-            .subscribe(
-                () => {
+            .subscribe({
+                next: () => {
                     this.user.fullName = this.profile.fullName;
                     this.api.currentUser = this.user;
                     this.error = '';
                     this.success = 'Successfully updated profile';
                 },
-                this.errorHandler,
-            )
+                error: this.errorHandler,
+            })
             .add(() => {this.updatingProfile = false;});
     }
 
@@ -69,15 +69,15 @@ export class AccountComponent implements OnInit {
         this.updatingEmail = true;
 
         this.userService.updateEmail(this.userEmail)
-            .subscribe(
-                () => {
+            .subscribe({
+                next: () => {
                     this.user.email = this.userEmail.email;
                     this.api.currentUser = this.user;
                     this.error = '';
                     this.success = 'Successfully updated email';
                 },
-                this.errorHandler,
-            )
+                error: this.errorHandler,
+            })
             .add(() => {this.updatingEmail = false;});
     }
 
@@ -85,13 +85,13 @@ export class AccountComponent implements OnInit {
         this.changingPassword = true;
 
         this.userService.changePassword(this.pwChange)
-            .subscribe(
-                () => {
+            .subscribe({
+                next: () => {
                     this.pwChange.newPassword = this.pwChange.currentPassword = this.error = '';
                     this.success = 'Successfully changed password';
                 },
-                this.errorHandler,
-            )
+                error: this.errorHandler,
+            })
             .add(() => {this.changingPassword = false;});
     }
 }

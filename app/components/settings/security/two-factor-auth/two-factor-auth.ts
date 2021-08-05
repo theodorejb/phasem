@@ -29,10 +29,10 @@ export class TwoFactorAuthComponent implements OnInit {
         });
 
         this.mfaService.getStatus()
-            .subscribe(
-                status => {this.status = status;},
-                error => {this.error = error;},
-            )
+            .subscribe({
+                next: status => {this.status = status;},
+                error: error => {this.error = error;},
+            })
             .add(() => {this.isLoading = false;});
     }
 
@@ -43,13 +43,13 @@ export class TwoFactorAuthComponent implements OnInit {
 
         this.disablingMfa = true;
 
-        this.mfaService.disableMfa().subscribe(
-            () => {
-                this.router.navigate(['/settings/security']);
-            },
-            error => {this.error = error;},
-        ).add(() => {
-            this.disablingMfa = false;
-        });
+        this.mfaService.disableMfa()
+            .subscribe({
+                next: () => {
+                    this.router.navigate(['/settings/security']);
+                },
+                error: error => {this.error = error;},
+            })
+            .add(() => {this.disablingMfa = false;});
     }
 }

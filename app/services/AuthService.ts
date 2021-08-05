@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
-import {map, mergeMap, tap} from 'rxjs/operators';
+import {Observable, of, map, mergeMap, tap} from 'rxjs';
 import {LoginCredentials, LoginResponse, NewUser} from '../models/User';
 import {ApiService} from "./ApiService";
 

@@ -16,10 +16,10 @@ export class SecurityComponent implements OnInit {
 
     ngOnInit() {
         this.mfaService.getStatus()
-            .subscribe(
-                status => {this.status = status;},
-                error => {this.error = error;},
-            )
+            .subscribe({
+                next: status => {this.status = status;},
+                error: error => {this.error = error;},
+            })
             .add(() => {this.isLoading = false;});
     }
 }

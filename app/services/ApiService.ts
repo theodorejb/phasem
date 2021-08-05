@@ -2,8 +2,7 @@ import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import * as Cookies from 'es-cookie';
-import {Observable, of, ReplaySubject, throwError} from 'rxjs';
-import {catchError, map, share, tap} from 'rxjs/operators';
+import {Observable, of, ReplaySubject, throwError, catchError, map, share, tap} from 'rxjs';
 import {User} from '../models/User';
 
 interface RequestOptions {
@@ -66,18 +65,18 @@ export class ApiService {
                 this.lastBuildCheck = new Date();
 
                 setTimeout(() => {
-                    this.http.get('login', {responseType: 'text'}).subscribe(
-                        page => {
+                    this.http.get('login', {responseType: 'text'}).subscribe({
+                        next: page => {
                             let build = getBuildHash(new DOMParser().parseFromString(page, "text/html"));
 
                             if (build !== this.currentBuild) {
                                 this.newBuildAvailable = true;
                             }
                         },
-                        error => {
+                        error: error => {
                             console.error('Failed to request index page');
                         },
-                    );
+                    });
                 }, 3000);
             }
         }

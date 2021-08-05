@@ -12,9 +12,9 @@ export class LogOutComponent implements OnInit {
 
     ngOnInit() {
         this.authService.logOut()
-            .subscribe(
-                result => {this.success = result;},
-                error => {this.error = error;},
-            );
+            .subscribe({
+                next: result => {this.success = result;},
+                error: error => {this.error = error;},
+            });
     }
 }

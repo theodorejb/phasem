@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
-import {Observable} from 'rxjs';
-import {tap} from 'rxjs/operators';
+import {Observable, tap} from 'rxjs';
 import {ApiService} from './ApiService';
 
 @Injectable({

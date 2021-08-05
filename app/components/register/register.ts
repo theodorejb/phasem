@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
-import {mergeMap} from 'rxjs/operators';
+import {mergeMap} from 'rxjs';
 import {NewUser} from "../../models/User";
 import {ApiService} from "../../services/ApiService";
 import {AuthService} from "../../services/AuthService";
@@ -35,12 +35,12 @@ export class RegisterComponent {
                     return this.api.getCurrentUser();
                 }),
             )
-            .subscribe(
-                () => {
+            .subscribe({
+                next: () => {
                     this.router.navigate(['/']);
                 },
-                error => {this.error = error;},
-            )
+                error: error => {this.error = error;},
+            })
             .add(() => {this.submitting = false;});
     }
 }

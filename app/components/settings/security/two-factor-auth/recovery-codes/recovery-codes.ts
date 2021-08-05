@@ -15,12 +15,12 @@ export class RecoveryCodesComponent implements OnInit {
 
     ngOnInit() {
         this.mfaService.setupMfaRecovery()
-            .subscribe(
-                recovery => {
+            .subscribe({
+                next: recovery => {
                     this.backupCodes = recovery.backupCodes;
                 },
-                error => {this.error = error;},
-            )
+                error: error => {this.error = error;},
+            })
             .add(() => {this.isLoading = false;});
     }
 }

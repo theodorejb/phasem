@@ -26,19 +26,19 @@ export class VerifyComponent implements OnInit {
 
     ngOnInit() {
         this.mfaService.setupMfaSecret()
-            .subscribe(
-                secret => {
+            .subscribe({
+                next: secret => {
                     this.secret = secret;
                     this.qrCode = this.sanitizer.bypassSecurityTrustHtml(secret.qrCode);
                 },
-                error => {
+                error: error => {
                     if (error === 'No two-factor setup found. Please attempt setup again.') {
                         this.router.navigate(['/settings/security/two-factor-auth'], {queryParams: {no2FA: 1}});
                     }
 
                     this.error = error;
                 },
-            )
+            })
             .add(() => {this.isLoading = false;});
     }
 
@@ -49,14 +49,14 @@ export class VerifyComponent implements OnInit {
     enableMfa() {
         this.enablingMfa = true;
 
-        this.mfaService.enableMfa(this.code).subscribe(
-            resp => {
-                this.apiService.setAuth(resp.token, false);
-                this.router.navigate(['/settings/security']);
-            },
-            error => {this.error = error;},
-        ).add(() => {
-            this.enablingMfa = false;
-        });
+        this.mfaService.enableMfa(this.code)
+            .subscribe({
+                next: resp => {
+                    this.apiService.setAuth(resp.token, false);
+                    this.router.navigate(['/settings/security']);
+                },
+                error: error => {this.error = error;},
+            })
+            .add(() => {this.enablingMfa = false;});
     }
 }
