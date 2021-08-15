@@ -169,8 +169,6 @@ class Accounts
 
     private static function hashPassword(string $password): string
     {
-        $result = password_hash($password, PASSWORD_DEFAULT);
-        assert($result !== null);
-        return $result;
+        return password_hash($password, PASSWORD_DEFAULT);
     }
 }
