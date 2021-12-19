@@ -17,40 +17,24 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "public/dist",
-            "deployUrl": "dist/",
+            "outputPath": "public",
             "index": "app/index.html",
             "main": "app/main.ts",
             "polyfills": "app/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "assets": [],
+            "assets": [
+              "app/api",
+              "app/favicon.ico",
+              "app/robots.txt"
+            ],
             "styles": [
               "node_modules/ladda/dist/ladda-themeless.min.css",
               "app/base_styles.css"
             ],
-            "scripts": [],
-            "vendorChunk": true,
-            "extractLicenses": false,
-            "buildOptimizer": false,
-            "sourceMap": true,
-            "optimization": false,
-            "namedChunks": true
+            "scripts": []
           },
           "configurations": {
             "production": {
-              "fileReplacements": [
-                {
-                  "replace": "app/environments/environment.ts",
-                  "with": "app/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -61,14 +45,30 @@
                   "type": "anyComponentStyle",
                   "maximumWarning": "6kb"
                 }
-              ]
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "app/environments/environment.ts",
+                  "with": "app/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ladda-app:build"
+            "browserTarget": "phasem:build"
           }
         },
         "lint": {

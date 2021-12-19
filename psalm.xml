@@ -8,7 +8,7 @@
 >
     <projectFiles>
         <directory name="php"/>
-        <directory name="public/api"/>
+        <directory name="app/api"/>
         <directory name="test/php"/>
         <ignoreFiles>
             <directory name="vendor"/>
