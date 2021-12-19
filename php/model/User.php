@@ -46,7 +46,7 @@ class User implements \JsonSerializable
         return password_verify($password, $this->password);
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'id' => $this->id,
