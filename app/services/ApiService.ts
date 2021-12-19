@@ -143,13 +143,13 @@ export class ApiService {
             this.currentUser = this.currentUserObs = null;
         }
 
-        Cookies.set('ApiAuth', token, {expires: 91});
+        Cookies.set('ApiAuth', token, {expires: 91, secure: true});
         this.baseHeaders = null;
     }
 
     unsetCurrentUser(): void {
         this.currentUser = this.currentUserObs = null;
-        Cookies.remove('ApiAuth');
+        Cookies.remove('ApiAuth', {secure: true});
         this.baseHeaders = null;
     }
 
