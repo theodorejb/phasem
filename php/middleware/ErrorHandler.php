@@ -27,7 +27,6 @@ class ErrorHandler
             $headers = [];
 
             if ($e instanceof HttpException) {
-                /** @var int $status */
                 $status = ($e->getCode() === 0) ? StatusCode::BAD_REQUEST : $e->getCode();
             } elseif ($e instanceof HttpMethodNotAllowedException) {
                 $status = StatusCode::METHOD_NOT_ALLOWED;
