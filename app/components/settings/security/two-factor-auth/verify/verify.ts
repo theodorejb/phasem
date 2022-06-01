@@ -13,7 +13,6 @@ export class VerifyComponent implements OnInit {
     public isLoading = true;
     public secret: MfaSecret;
     public enablingMfa = false;
-    public showSecret = false;
     public code = '';
     public qrCode: SafeHtml;
 
@@ -40,10 +39,6 @@ export class VerifyComponent implements OnInit {
                 },
             })
             .add(() => {this.isLoading = false;});
-    }
-
-    toggleSecret() {
-        this.showSecret = !this.showSecret;
     }
 
     enableMfa() {

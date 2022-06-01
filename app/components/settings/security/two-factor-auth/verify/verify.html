@@ -3,9 +3,9 @@
 <p class="error">{{error}}</p>
 
 <load-contents [loading]="isLoading">
-    <p>
-        If you can't use a barcode, <button class="link" (click)="toggleSecret()">enter this text code</button>
-        instead<span *ngIf="!showSecret">.</span><span *ngIf="showSecret">: {{secret.secret}}</span>
+    <p *ngIf="secret">
+        If you can't use a barcode, enter this text code instead:<br/>
+        {{secret.secret}}
     </p>
 
     <form *ngIf="secret" ngNativeValidate (submit)="enableMfa()">
