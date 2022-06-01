@@ -28,7 +28,7 @@ class DbConnector
             $c = App::getConfig();
             self::$connection = new mysqli($c->getHost(), $c->getUsername(), $c->getPassword(), $c->getDatabase());
 
-            if (self::$connection->connect_errno !== 0) {
+            if (self::$connection->connect_error) {
                 throw new \Exception('Failed to connect to MySQL: ' . self::$connection->connect_error);
             }
         }

@@ -73,6 +73,8 @@ class ErrorHandler
             $json = ['error' => $message];
 
             if ($displayErrorDetails) {
+                $json['file'] = $e->getFile();
+                $json['line'] = $e->getLine();
                 $json['trace'] = $e->getTraceAsString();
             }
 
